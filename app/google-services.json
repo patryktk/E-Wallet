@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1030730813908",
+    "project_id": "wallet-app-cdf0a",
+    "storage_bucket": "wallet-app-cdf0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030730813908:android:e64678105f05fd3cbe8641",
+        "android_client_info": {
+          "package_name": "pl.tkaczyk.walletapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030730813908-0fv1j9s133th03ua04pgdp039h885rus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM69eQhl1kvuo1xsemLCg5eam4Q5ZUZnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030730813908-0fv1j9s133th03ua04pgdp039h885rus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
