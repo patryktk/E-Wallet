@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Wallet App</string>
-    <string name="Author">Author</string>
-    <string name="quote">Add your quote here</string>
-    <string name="textViewQuote">Text from database goes here</string>
+    <string name="email">Email</string>
+    <string name="button_logout">Logout</string>
+    <string name="facebook_app_id">284599049963546</string>
+    <string name="fb_login_protocol_scheme">fb284599049963546</string>
 </resources>
