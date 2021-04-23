@@ -16,12 +16,14 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -40,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     CallbackManager mCallbackManager;
     private LoginButton loginButton;
-    private Button loginButton1;
 
 
 
@@ -59,13 +62,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SignInButton signInButtonGoogle =  findViewById(R.id.google_sign_in);
+
 
         mAuth = FirebaseAuth.getInstance();
-        loginButton1 = (Button) findViewById(R.id.facebook_login_button1);
-//        loginButton1.setBackgroundColor(getResources().getColor(R.drawable.custom_fb_button));
 
         createRequest();
-        findViewById(R.id.facebook_login_button).setOnClickListener(v ->{
+        findViewById(R.id.facebook_login_button_v).setOnClickListener(v -> {
+            findViewById(R.id.facebook_login_button_uv).performClick();
+        });
+
+        findViewById(R.id.facebook_login_button_uv).setOnClickListener(v ->{
             signInFacebook();
         });
 
@@ -74,11 +81,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void signInFacebook() {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         mCallbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        loginButton = (LoginButton) findViewById(R.id.facebook_login_button_uv);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override

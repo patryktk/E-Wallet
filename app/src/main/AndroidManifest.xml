@@ -14,7 +14,7 @@
         <activity android:name=".TestDatabase" />
         <activity android:name=".ChartActivity" />
         <activity android:name=".MainActivity"
-            android:label="Sign in">
+            android:label="Wallet">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

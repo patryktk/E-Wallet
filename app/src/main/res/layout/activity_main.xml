@@ -10,48 +10,90 @@
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_sign_in"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="80dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.17000002" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textAllCaps="true"
+        android:layout_marginTop="32dp"
+        android:fontFamily="serif"
+        android:text="Wallet"
+        android:textAllCaps="false"
+        android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold|italic"
-        app:layout_constraintBottom_toTopOf="@+id/google_sign_in"
         app:layout_constraintEnd_toEndOf="@+id/google_sign_in"
         app:layout_constraintStart_toStartOf="@+id/google_sign_in"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebook_login_button"
+        android:id="@+id/facebook_login_button_uv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facebook_login_button_v" />
 
 
-    <Button
-        android:id="@+id/facebook_login_button1"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/google_login_button_v"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/custom_fb_button"
-        android:drawableLeft="@drawable/ic_facebook_logo"
+        android:background="@drawable/com_facebook_auth_dialog_background"
+        android:drawableStart="@drawable/ic_google_icon"
+        android:drawableLeft="@drawable/ic_google_icon"
+        android:drawablePadding="-20dp"
+        android:text="Sign in with Google"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facebook_login_button_v" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/facebook_login_button_v"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/com_facebook_button_background"
+        android:drawableStart="@drawable/ic_facebook"
+        android:drawableLeft="@drawable/ic_facebook"
+        android:drawablePadding="-20dp"
         android:text="Sign in with Facebook"
         android:textAllCaps="false"
         android:textColor="#fff"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google_sign_in" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:srcCompat="@drawable/ewallet" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
