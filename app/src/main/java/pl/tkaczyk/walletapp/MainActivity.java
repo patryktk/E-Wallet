@@ -1,29 +1,26 @@
 package pl.tkaczyk.walletapp;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,17 +31,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.Arrays;
-
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private final static int RC_SIGN_IN = 0;
+    CallbackManager mCallbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-    CallbackManager mCallbackManager;
     private LoginButton loginButton;
-
+    private AppCompatButton googleLoginButton;
 
 
     @Override
@@ -53,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
         }
     }
@@ -62,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SignInButton signInButtonGoogle =  findViewById(R.id.google_sign_in);
-
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -72,13 +65,24 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.facebook_login_button_uv).performClick();
         });
 
-        findViewById(R.id.facebook_login_button_uv).setOnClickListener(v ->{
+        findViewById(R.id.facebook_login_button_uv).setOnClickListener(v -> {
             signInFacebook();
         });
 
-        findViewById(R.id.google_sign_in).setOnClickListener(v -> {
+        googleLoginButton = (AppCompatButton) findViewById(R.id.google_login_button_v);
+
+
+        googleLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.google_login_button_uv).performClick();
+            }
+        });
+        findViewById(R.id.google_login_button_uv).setOnClickListener(x -> {
             signInGoogle();
         });
+
+
     }
 
 
