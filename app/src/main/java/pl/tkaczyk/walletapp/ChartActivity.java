@@ -3,9 +3,11 @@ package pl.tkaczyk.walletapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.login.LoginManager;
@@ -16,15 +18,19 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class ChartActivity extends AppCompatActivity {
+    private static final String TAG = "ChartActivity";
 
     public static final String VALUE_KEY = "value";
     public static final String QUOTE_KEY = "quote";
@@ -63,7 +69,19 @@ public class ChartActivity extends AppCompatActivity {
         super.onStart();
         PieChart mPieChart = findViewById(R.id.chart);
         ArrayList<PieEntry> data = new ArrayList<>();
+        mDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    Log.d(TAG, "onComplete: Good");
+                }else{
+                    Log.d(TAG, "onComplete: Fail");
+                }
+            }
+        });
         mDocumentReference.get().addOnSuccessListener(documentSnapshot -> {
+
             data.add(new PieEntry(20, documentSnapshot.getString(QUOTE_KEY)));
 
             PieDataSet pieDataSet = new PieDataSet(data, "Wydatki");

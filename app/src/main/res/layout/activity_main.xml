@@ -8,19 +8,6 @@
     tools:context=".MainActivity"
     android:background="@color/white">
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_login_button_uv"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.17000002" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -32,8 +19,8 @@
         android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="@+id/google_login_button_uv"
-        app:layout_constraintStart_toStartOf="@+id/google_login_button_uv"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.facebook.login.widget.LoginButton
