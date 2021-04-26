@@ -20,9 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,10 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class ChartActivity extends AppCompatActivity {
-    private static final String TAG = "ChartActivity";
-
     public static final String VALUE_KEY = "value";
     public static final String QUOTE_KEY = "quote";
+    private static final String TAG = "ChartActivity";
     TextView email;
     Button logout;
     private FirebaseAuth mAuth;
@@ -72,10 +69,10 @@ public class ChartActivity extends AppCompatActivity {
         mDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     Log.d(TAG, "onComplete: Good");
-                }else{
+                } else {
                     Log.d(TAG, "onComplete: Fail");
                 }
             }
