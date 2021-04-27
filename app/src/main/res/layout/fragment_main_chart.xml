@@ -5,11 +5,19 @@
     android:background="@color/white"
     android:id="@+id/fragment_main_chart">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="56dp"
+        android:layout_height="58dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="524dp"
+        android:src="@drawable/plus" />
+
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        />
+        android:layout_width="344dp"
+        android:layout_height="369dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp" />
 
 </RelativeLayout>

@@ -1,11 +1,13 @@
 package pl.tkaczyk.walletapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,12 +31,12 @@ public class MainChartFragment extends Fragment {
     public static final String VALUE_KEY = "value";
     public static final String QUOTE_KEY = "quote";
     private static final String TAG = "MainChartFragment";
+    ImageView mImageView;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_main_chart, container, false);
     }
 
@@ -43,7 +45,12 @@ public class MainChartFragment extends Fragment {
         super.onStart();
         PieChart mPieChart = (PieChart) getView().findViewById(R.id.chart);
         makeChart(mPieChart);
-        mPieChart.performClick();
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+            }
+        });
     }
 
     void makeChart(PieChart mPieChart){

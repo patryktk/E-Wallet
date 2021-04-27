@@ -14,9 +14,6 @@
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".TestDatabase" />
         <activity
-            android:name=".ChartActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-        <activity
             android:name=".MainActivity"
             android:label="Wallet"
             android:theme="@style/Theme.AppCompat.NoActionBar">

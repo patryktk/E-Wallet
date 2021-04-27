@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:id="@+id/draw_layout"
     android:fitsSystemWindows="true"
-    tools:context=".ChartActivity"
     tools:openDrawer="end">
 
     <LinearLayout
