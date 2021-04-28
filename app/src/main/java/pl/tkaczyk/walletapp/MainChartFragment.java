@@ -1,13 +1,18 @@
 package pl.tkaczyk.walletapp;
 
-import android.content.Intent;
+import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,11 +32,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class MainChartFragment extends Fragment {
-    private DocumentReference mDocumentReference = FirebaseFirestore.getInstance().document("sampleData/inspiration");
     public static final String VALUE_KEY = "value";
     public static final String QUOTE_KEY = "quote";
     private static final String TAG = "MainChartFragment";
-    ImageView mImageView;
+    private final DocumentReference mDocumentReference = FirebaseFirestore.getInstance().document("sampleData/inspiration");
+    private AlertDialog alertDialog;
+    private AlertDialog.Builder alertDialogBuilder;
+    private Button cancelButtonPopUp, saveButtonPopUp;
 
 
     @Nullable
@@ -43,17 +50,34 @@ public class MainChartFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        PieChart mPieChart = (PieChart) getView().findViewById(R.id.chart);
+        PieChart mPieChart = getView().findViewById(R.id.chart);
         makeChart(mPieChart);
-        mImageView.setOnClickListener(new View.OnClickListener() {
+
+        ImageView imageView = getView().findViewById(R.id.addImageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
+            public void onClick(View view) {
+                popUp(view);
             }
         });
+
     }
 
-    void makeChart(PieChart mPieChart){
+    public void popUp(View anchorView) {
+        View popupView = getLayoutInflater().inflate(R.layout.activity_popup, null);
+
+        PopupWindow popupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+
+        popupWindow.setWidth(350);
+        popupWindow.setHeight(475);
+
+        popupWindow.showAtLocation(anchorView, Gravity.CENTER,0,0);
+    }
+
+    void makeChart(PieChart mPieChart) {
         ArrayList<PieEntry> data = new ArrayList<>();
         mDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
