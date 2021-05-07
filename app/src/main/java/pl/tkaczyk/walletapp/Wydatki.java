@@ -3,50 +3,47 @@ package pl.tkaczyk.walletapp;
 import java.util.Date;
 
 public class Wydatki {
-    Date date;
-    String name, user;
-    Number value;
-
+    String value, category, userMail,date;
 
     public Wydatki() {
     }
 
-    public Wydatki(Date date, String name, String user, Number value) {
-        this.date = date;
-        this.name = name;
-        this.user = user;
+    public Wydatki(String value, String category, String userMail, String date) {
         this.value = value;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
+        this.category = category;
+        this.userMail = userMail;
         this.date = date;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public Number getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Number value) {
+    public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

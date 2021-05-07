@@ -7,32 +7,42 @@
     android:layout_gravity="center"
     android:padding="5dp">
 
-    <TextView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:textColor="@color/white"
-        android:text="X"
-        android:textStyle="bold"
-        android:layout_gravity="end"
-        android:gravity="center"/>
-
     <EditText
-        android:id="@+id/editTextNumberDecimal"
+        android:id="@+id/editTextValueOfExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="numberDecimal" />
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonPopupCalendar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="DATE" />
+
+    <Button
+        android:id="@+id/buttonPopupAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dodaj" />
+
+    <Button
+        android:id="@+id/buttonPopupCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anuluj" />
 
 
 </LinearLayout>

@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WalletApp">
         <activity android:name=".HomeActivity"></activity>
-        <activity android:name=".TestDatabase" />
         <activity
             android:name=".MainActivity"
             android:label="Wallet"
