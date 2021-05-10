@@ -1,18 +1,29 @@
-package pl.tkaczyk.walletapp;
+package pl.tkaczyk.walletapp.model;
 
 import java.util.Date;
 
-public class Wydatki {
-    String value, category, userMail,date;
+public class Expenses {
+    int id;
+    String value, category, userMail,date, description;
 
-    public Wydatki() {
+    public Expenses() {
     }
 
-    public Wydatki(String value, String category, String userMail, String date) {
+    public Expenses(int id, String value, String category, String userMail, String date, String description) {
+        this.id = id;
         this.value = value;
         this.category = category;
         this.userMail = userMail;
         this.date = date;
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getValue() {
@@ -45,5 +56,13 @@ public class Wydatki {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

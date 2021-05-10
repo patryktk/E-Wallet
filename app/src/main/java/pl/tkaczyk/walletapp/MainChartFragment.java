@@ -49,7 +49,7 @@ public class MainChartFragment extends Fragment {
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
     private Button cancelButton, addButton, dateButton;
-    private EditText valueExpenseEditText;
+    private EditText valueExpenseEditText, descriptionEditText;
     private Spinner spinner;
     private int day, month, year;
     private String date;
@@ -96,6 +96,7 @@ public class MainChartFragment extends Fragment {
         spinner = (Spinner) popupView.findViewById(R.id.spinner);
         dateButton = (Button) popupView.findViewById(R.id.buttonPopupCalendar);
         tvDate = (TextView) popupView.findViewById(R.id.tvDate);
+        descriptionEditText = (EditText) popupView.findViewById(R.id.editTextDescription);
 
         dateButton.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
@@ -128,8 +129,9 @@ public class MainChartFragment extends Fragment {
         String valueOfExpense = valueExpenseEditText.getText().toString();
         String categoryOfExpense = spinner.getSelectedItem().toString();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        String descriptionOfExpense = descriptionEditText.getText().toString();
 
-        Wydatki wydatki = new Wydatki(valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date);
+//        Wydatki wydatki = new Wydatki(valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense);
 
 //        db.collection("expenses").add(wydatki).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
 //            @Override
