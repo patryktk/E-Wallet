@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_home_icon"
             android:title="Home" />
         <item
-            android:id="@+id/nav_other"
+            android:id="@+id/nav_categories"
             android:icon="@drawable/ic_home_icon"
-            android:title="Other" />
+            android:title="Categories" />
     </group>
 
     <item android:title="Action">

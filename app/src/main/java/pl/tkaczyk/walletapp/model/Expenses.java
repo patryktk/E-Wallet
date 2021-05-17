@@ -1,10 +1,8 @@
 package pl.tkaczyk.walletapp.model;
 
-import java.util.Date;
-
 public class Expenses {
     int id;
-    String value, category, userMail,date, description;
+    String value,category, userMail, date, description;
 
     public Expenses() {
     }

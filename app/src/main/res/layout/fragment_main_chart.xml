@@ -5,14 +5,14 @@
     android:background="@color/white"
     android:id="@+id/fragment_main_chart">
 
+
     <ImageView
-        android:id="@+id/addImageView"
+        android:id="@+id/imageViewMainFragmentAddExpense"
         android:layout_width="56dp"
         android:layout_height="58dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="524dp"
         android:src="@drawable/plus" />
-
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"

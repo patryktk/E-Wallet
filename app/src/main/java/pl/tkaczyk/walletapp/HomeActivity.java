@@ -19,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import pl.tkaczyk.walletapp.fragments.CategoriesFragment;
+import pl.tkaczyk.walletapp.fragments.MainChartFragment;
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private FirebaseAuth mAuth;
@@ -67,6 +70,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainChartFragment()).commit();
                 break;
+            case R.id.nav_categories:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CategoriesFragment()).commit();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

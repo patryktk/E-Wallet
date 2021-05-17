@@ -1,10 +1,8 @@
-package pl.tkaczyk.walletapp;
+package pl.tkaczyk.walletapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,32 +13,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import pl.tkaczyk.walletapp.DataBaseHelper;
+import pl.tkaczyk.walletapp.R;
+import pl.tkaczyk.walletapp.model.Categories;
+import pl.tkaczyk.walletapp.model.Expenses;
 
 public class MainChartFragment extends Fragment {
     public static final String QUOTE_KEY = "quote";
@@ -69,7 +61,7 @@ public class MainChartFragment extends Fragment {
         makeChart(mPieChart);
 
 
-        ImageView imageView = getView().findViewById(R.id.addImageView);
+        ImageView imageView = getView().findViewById(R.id.imageViewMainFragmentAddExpense);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,9 +71,20 @@ public class MainChartFragment extends Fragment {
 
     }
 
+    public void primaryCategories() {
+        //Dodać sprawdzenie czy są dodane kategorie, jak nie to dodać, jak tak to nic
+        Categories categories1 = new Categories(-1, "Jedzenie");
+        Categories categories2 = new Categories(-1, "Transport");
+        Categories categories3 = new Categories(-1, "Opłaty");
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+        dataBaseHelper.addOne(categories1);
+        dataBaseHelper.addOne(categories2);
+        dataBaseHelper.addOne(categories3);
+    }
+
     public void createNewDialog() {
         dialogBuilder = new AlertDialog.Builder(getView().getContext());
-        final View popupView = getLayoutInflater().inflate(R.layout.activity_popup, null);
+        final View popupView = getLayoutInflater().inflate(R.layout.popup_expense_add, null);
 
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
@@ -90,12 +93,12 @@ public class MainChartFragment extends Fragment {
         fillSpinner(popupView);
 
         cancelButton = (Button) popupView.findViewById(R.id.buttonPopupCancel);
-        addButton = (Button) popupView.findViewById(R.id.buttonPopupAdd);
+        addButton = (Button) popupView.findViewById(R.id.buttonExpensePopupAdd);
         valueExpenseEditText = (EditText) popupView.findViewById(R.id.editTextValueOfExpense);
         spinner = (Spinner) popupView.findViewById(R.id.spinner);
         dateButton = (Button) popupView.findViewById(R.id.buttonPopupCalendar);
         tvDate = (TextView) popupView.findViewById(R.id.tvDate);
-        descriptionEditText = (EditText) popupView.findViewById(R.id.editTextDescription);
+        descriptionEditText = (EditText) popupView.findViewById(R.id.editTextExpenseNameAdd);
 
         dateButton.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
@@ -130,81 +133,72 @@ public class MainChartFragment extends Fragment {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String descriptionOfExpense = descriptionEditText.getText().toString();
 
-//        Wydatki wydatki = new Wydatki(valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense);
+        Expenses expenses;
+        expenses = new Expenses(-1, valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense);
 
-//        db.collection("expenses").add(wydatki).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//            @Override
-//            public void onSuccess(DocumentReference documentReference) {
-//                Log.d(TAG, "onSuccess: " + documentReference.getId());
-//            }
-//        });
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+        boolean success = dataBaseHelper.addOne(expenses);
+        if (success) {
+            Toast.makeText(getContext(), "Pomyślnie dodano :", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Dodanie nie powiodło się", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     public void fillSpinner(View view) {
-        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-        CollectionReference categoryRef = rootRef.collection("categories");
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-        List<String> categories = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        DataBaseHelper db = new DataBaseHelper(getContext());
+        List<String> categoriesList = db.getAllCategories();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, categoriesList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        categoryRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    String name = documentSnapshot.getString("name");
-                    Log.d(TAG, name.toString());
-                    categories.add(name);
-                }
-                adapter.notifyDataSetChanged();
-            } else {
-                Log.d(TAG, "createNewDialog: Error", task.getException());
-            }
-        });
-
     }
 
 
     void makeChart(PieChart mPieChart) {
-        db.collection("expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(TAG, "onComplete show document data: " + document.getData());
-                    }
-                }
-            }
-        });
+        ArrayList<PieEntry> entries = new ArrayList<>();
 
-        DocumentReference mDocumentReference = FirebaseFirestore.getInstance().document("sampleData/inspiration");
-        ArrayList<PieEntry> data = new ArrayList<>();
-        mDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    Log.d(TAG, "onComplete: Good");
-                } else {
-                    Log.d(TAG, "onComplete: Fail");
-                }
-            }
-        });
-        mDocumentReference.get().addOnSuccessListener(documentSnapshot -> {
 
-            data.add(new PieEntry(20, documentSnapshot.getString(QUOTE_KEY)));
-
-            PieDataSet pieDataSet = new PieDataSet(data, "Wydatki");
-            pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-            pieDataSet.setValueTextColor(Color.BLACK);
-            pieDataSet.setValueTextSize(16f);
-
-            PieData pieData = new PieData(pieDataSet);
-
-            mPieChart.setData(pieData);
-            mPieChart.getDescription().setEnabled(false);
-            mPieChart.setCenterText("Wydatki");
-            mPieChart.animate();
-        });
+//        db.collection("expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Log.d(TAG, "onComplete show document data: " + document.getData());
+//                    }
+//                }
+//            }
+//        });
+//
+//        DocumentReference mDocumentReference = FirebaseFirestore.getInstance().document("sampleData/inspiration");
+//        ArrayList<PieEntry> data = new ArrayList<>();
+//        mDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot documentSnapshot = task.getResult();
+//                    Log.d(TAG, "onComplete: Good");
+//                } else {
+//                    Log.d(TAG, "onComplete: Fail");
+//                }
+//            }
+//        });
+//        mDocumentReference.get().addOnSuccessListener(documentSnapshot -> {
+//
+//            data.add(new PieEntry(20, documentSnapshot.getString(QUOTE_KEY)));
+//
+//            PieDataSet pieDataSet = new PieDataSet(data, "Wydatki");
+//            pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+//            pieDataSet.setValueTextColor(Color.BLACK);
+//            pieDataSet.setValueTextSize(16f);
+//
+//            PieData pieData = new PieData(pieDataSet);
+//
+//            mPieChart.setData(pieData);
+//            mPieChart.getDescription().setEnabled(false);
+//            mPieChart.setCenterText("Wydatki");
+//            mPieChart.animate();
+//        });
     }
 }
