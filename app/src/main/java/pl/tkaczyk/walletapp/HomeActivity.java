@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import pl.tkaczyk.walletapp.fragments.CategoriesFragment;
+import pl.tkaczyk.walletapp.fragments.ListOfExpensesFragment;
 import pl.tkaczyk.walletapp.fragments.MainChartFragment;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,6 +73,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_categories:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CategoriesFragment()).commit();
+                break;
+            case R.id.nav_expenses:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListOfExpensesFragment()).commit();
+                break;
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

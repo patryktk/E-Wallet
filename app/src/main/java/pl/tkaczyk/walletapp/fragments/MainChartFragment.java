@@ -3,6 +3,7 @@ package pl.tkaczyk.walletapp.fragments;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class MainChartFragment extends Fragment {
     private EditText valueExpenseEditText, descriptionEditText;
     private Spinner spinner;
     private int day, month, year;
-    private String date;
+    private String date, monthName;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView tvDate;
 
@@ -60,26 +61,25 @@ public class MainChartFragment extends Fragment {
         PieChart mPieChart = getView().findViewById(R.id.chart);
         makeChart(mPieChart);
 
+        primaryCategories();
 
         ImageView imageView = getView().findViewById(R.id.imageViewMainFragmentAddExpense);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewDialog();
-            }
-        });
+        imageView.setOnClickListener(view -> createNewDialog());
 
     }
 
     public void primaryCategories() {
-        //Dodać sprawdzenie czy są dodane kategorie, jak nie to dodać, jak tak to nic
-        Categories categories1 = new Categories(-1, "Jedzenie");
-        Categories categories2 = new Categories(-1, "Transport");
-        Categories categories3 = new Categories(-1, "Opłaty");
-        DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
-        dataBaseHelper.addOne(categories1);
-        dataBaseHelper.addOne(categories2);
-        dataBaseHelper.addOne(categories3);
+        DataBaseHelper db = new DataBaseHelper(getContext());
+        List<String> categoriesList = db.getAllCategories();
+        if (categoriesList.isEmpty()) {
+            Categories categories1 = new Categories(-1, "Jedzenie");
+            Categories categories2 = new Categories(-1, "Transport");
+            Categories categories3 = new Categories(-1, "Opłaty");
+            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+            dataBaseHelper.addOne(categories1);
+            dataBaseHelper.addOne(categories2);
+            dataBaseHelper.addOne(categories3);
+        }
     }
 
     public void createNewDialog() {
@@ -111,19 +111,72 @@ public class MainChartFragment extends Fragment {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     month = month + 1;
-                    date = dayOfMonth + ":" + month + ":" + year;
+                    date = dayOfMonth + "/" + month + "/" + year;
                     tvDate.setText(date);
+                    monthName = pickMonth(month);
                 }
             }, year, month, day);
             datePickerDialog.show();
         });
-
-
-        addButton.setOnClickListener(v ->
-                insertData(date));
+        addButton.setOnClickListener(v ->{
+            String value = valueExpenseEditText.getText().toString();
+            String date = tvDate.getText().toString();
+            if(TextUtils.isEmpty(value)){
+                valueExpenseEditText.setError("Nie może być puste");
+            }else if(TextUtils.isEmpty(date)){
+                tvDate.setError("Nie może być puste");
+            }else{
+                insertData(date);
+                dialog.dismiss();
+            }
+        });
 
         cancelButton.setOnClickListener(v ->
                 dialog.dismiss());
+    }
+
+    private String pickMonth(int month) {
+
+        switch (month) {
+            case 1:
+                monthName = "Styczeń";
+                break;
+            case 2:
+                monthName = "Luty";
+                break;
+            case 3:
+                monthName = "Marzec";
+                break;
+            case 4:
+                monthName = "Kwiecień";
+                break;
+            case 5:
+                monthName = "Maj";
+                break;
+            case 6:
+                monthName = "Czerwiec";
+                break;
+            case 7:
+                monthName = "Lipiec";
+                break;
+            case 8:
+                monthName = "Sierpień";
+                break;
+            case 9:
+                monthName = "Wrzesień";
+                break;
+            case 10:
+                monthName = "Październik";
+                break;
+            case 11:
+                monthName = "Listopad";
+                break;
+            case 12:
+                monthName = "Grudzień";
+                break;
+
+        }
+        return monthName;
     }
 
 
@@ -134,7 +187,7 @@ public class MainChartFragment extends Fragment {
         String descriptionOfExpense = descriptionEditText.getText().toString();
 
         Expenses expenses;
-        expenses = new Expenses(-1, valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense);
+        expenses = new Expenses(-1, valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense, monthName);
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
         boolean success = dataBaseHelper.addOne(expenses);

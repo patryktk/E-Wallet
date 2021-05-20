@@ -12,6 +12,10 @@
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_home_icon"
             android:title="Categories" />
+        <item
+            android:id="@+id/nav_expenses"
+            android:icon="@drawable/ic_home_icon"
+            android:title="Expenses" />
     </group>
 
     <item android:title="Action">

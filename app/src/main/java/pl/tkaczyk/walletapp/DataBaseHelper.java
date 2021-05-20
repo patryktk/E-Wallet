@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 
 import androidx.annotation.Nullable;
 
@@ -24,6 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String expensesTableDate = "DATE";
     public static final String expensesTableDescription = "DESCRIPTION";
     public static final String expensesTableCategoryName = "CATEGORY";
+    public static final String expensesTableMonth = "MONTH";
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, "wallet.db", null, 1);
@@ -36,7 +36,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " " + expensesTableCategoryName + " varchar," +
                 " " + expensesTableUserMail + " varchar," +
                 " " + expensesTableDate + " varchar," +
-                " " + expensesTableDescription + " varchar)";
+                " " + expensesTableDescription + " varchar, " +
+                " " + expensesTableMonth + " varchar)";
         String createSecondTableStatement = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar)";
 
         db.execSQL(createTableStatement);
@@ -47,14 +48,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-    public boolean removeOne(String name){
+
+    public boolean removeOne(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + categoriesTable +" WHERE " + categoriesName + " = " + "'" + name + "'" ;
+        String query = "DELETE FROM " + categoriesTable + " WHERE " + categoriesName + " = " + "'" + name + "'";
 
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -83,6 +85,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(expensesTableUserMail, expenses.getUserMail());
         cv.put(expensesTableDate, expenses.getDate());
         cv.put(expensesTableDescription, expenses.getDescription());
+        cv.put(expensesTableMonth, expenses.getMonth());
 
 
         long insert = db.insert(expensesTable, null, cv);
@@ -94,47 +97,68 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<String> getAllCategories(){
+    public List<String> getAllCategories() {
         List<String> categoriesList = new ArrayList<>();
 
         String queryString = "SELECT * FROM " + categoriesTable;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString,null);
+        Cursor cursor = db.rawQuery(queryString, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 categoriesList.add(cursor.getString(1));
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
         return categoriesList;
     }
 
-    public List<Expenses> getCurrentUserExpenses(String user){
-        List<Expenses> expensesList = new ArrayList<>();
-
-        String queryString = "select * from " + expensesTable + " where " + expensesTableUserMail + " = " + user;
+    public Cursor getSumOfMoney(String month) {
+        String query = "SELECT sum(" + expensesTableValue + ") from " + expensesTable + " where " + expensesTableMonth + "=" + "'" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString, null);
-
-        if(cursor.moveToFirst()){
-            do{
-               String value = cursor.getString(1);
-            }while (cursor.moveToNext());
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
         }
-        cursor.close();
-        db.close();
-        return expensesList;
+        return cursor;
     }
-    public Cursor getCategories(){
+    public String  getSumOfMoney1(String month) {
+        String query = "SELECT sum(" + expensesTableValue + ") from " + expensesTable + " where " + expensesTableMonth + "=" + "'" + month + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = null;
+        String money = "";
+        if (db != null) {
+            cursor1 = db.rawQuery(query, null);
+            if(cursor1.getCount() >0 ){
+                cursor1.moveToFirst();
+                money = cursor1.getString(0);
+            }
+        }
+        return money;
+    }
+
+
+    public Cursor getExpensesByMonth(String month) {
+        String query = "SELECT * from " + expensesTable + " WHERE " + expensesTableMonth + " = " + "'" + month + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    public Cursor getCategories() {
         String query = "SELECT * FROM " + categoriesTable;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
-        if(db != null){
-            cursor = db.rawQuery(query,null);
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
         }
         return cursor;
     }
+
 }

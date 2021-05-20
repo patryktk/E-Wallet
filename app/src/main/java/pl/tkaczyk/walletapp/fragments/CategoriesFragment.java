@@ -20,9 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import pl.tkaczyk.walletapp.CustomAdapterRecycleView;
 import pl.tkaczyk.walletapp.DataBaseHelper;
 import pl.tkaczyk.walletapp.R;
+import pl.tkaczyk.walletapp.adapter.CustomAdapterRVCategories;
 import pl.tkaczyk.walletapp.model.Categories;
 
 public class CategoriesFragment extends Fragment {
@@ -30,7 +30,7 @@ public class CategoriesFragment extends Fragment {
     RecyclerView mRecyclerView;
     DataBaseHelper db;
     ArrayList<String> categoriesName;
-    CustomAdapterRecycleView mCustomAdapterRecycleView;
+    CustomAdapterRVCategories mCustomAdapterRVCategories;
     FloatingActionButton floatingRemoveButton, floatingAddButton;
     Button addButton, removeButton;
     EditText editTextCategoryNameAdd, editTextCategoryNameRemove;
@@ -42,36 +42,41 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        mRecyclerView = view.findViewById(R.id.recyclerView);
+        mRecyclerView = view.findViewById(R.id.recyclerViewCategories);
         db = new DataBaseHelper(getContext());
 
         categoriesName = new ArrayList<>();
-        storeDataInArray();
+
         floatingAddButton = view.findViewById(R.id.floatingActionButtonAdd);
         floatingAddButton.setOnClickListener(v -> {
-            createNewAddDialog();
+            createNewAddDialog(categoriesName, view);
         });
+
         floatingRemoveButton = view.findViewById(R.id.floatingActionButtonRemove);
         floatingRemoveButton.setOnClickListener(v -> {
-            createNewRemoveDialog();
+            createNewRemoveDialog(categoriesName, view);
         });
 
-        mCustomAdapterRecycleView = new CustomAdapterRecycleView(getContext(), categoriesName);
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mCustomAdapterRecycleView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        xxx(categoriesName, view);
 
 
         return view;
+    }
+
+    public void xxx(ArrayList categoriesName, View view) {
+        categoriesName.clear();
+        storeDataInArray();
+        mCustomAdapterRVCategories = new CustomAdapterRVCategories(getContext(), categoriesName);
+        mRecyclerView.setAdapter(mCustomAdapterRVCategories);
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = getLayoutInflater().inflate(R.layout.fragment_categories, null);
-
-
     }
 
     void storeDataInArray() {
@@ -85,7 +90,7 @@ public class CategoriesFragment extends Fragment {
         }
     }
 
-    public void createNewAddDialog() {
+    public void createNewAddDialog(ArrayList categoriesName, View view) {
         dialogBuilder = new AlertDialog.Builder(getView().getContext());
         final View popupView = getLayoutInflater().inflate(R.layout.popup_categories_add, null);
 
@@ -99,12 +104,19 @@ public class CategoriesFragment extends Fragment {
 
         addButton.setOnClickListener(v -> {
             String categoryName = editTextCategoryNameAdd.getText().toString();
-            Categories categories = new Categories(-1, categoryName);
-            db.addOne(categories);
+            if (categoryName.isEmpty()) {
+                Toast.makeText(getContext(), "Uzupełnij pole nazwy", Toast.LENGTH_SHORT).show();
+            } else {
+                Categories categories = new Categories(-1, categoryName);
+                db.addOne(categories);
+                Toast.makeText(getContext(), "Pomyślnie dodano", Toast.LENGTH_SHORT).show();
+                xxx(categoriesName, view);
+                dialog.dismiss();
+            }
         });
     }
 
-    public void createNewRemoveDialog() {
+    public void createNewRemoveDialog(ArrayList categoriesName, View view) {
         dialogBuilder = new AlertDialog.Builder(getView().getContext());
         final View popupView = getLayoutInflater().inflate(R.layout.popup_categories_remove, null);
 
@@ -118,7 +130,14 @@ public class CategoriesFragment extends Fragment {
 
         removeButton.setOnClickListener(v -> {
             String categoryName = editTextCategoryNameRemove.getText().toString();
-            db.removeOne(categoryName);
+            if(categoryName.isEmpty()){
+                Toast.makeText(getContext(), "Uzupełnij pole nazwy", Toast.LENGTH_SHORT).show();
+            }else{
+                db.removeOne(categoryName);
+                Toast.makeText(getContext(), "Pomyślnie usunięto", Toast.LENGTH_SHORT).show();
+                xxx(categoriesName, view);
+                dialog.dismiss();
+            }
         });
     }
 
