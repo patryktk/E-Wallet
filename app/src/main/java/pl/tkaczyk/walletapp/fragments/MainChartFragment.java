@@ -24,7 +24,6 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,8 +35,7 @@ import pl.tkaczyk.walletapp.model.Categories;
 import pl.tkaczyk.walletapp.model.Expenses;
 
 public class MainChartFragment extends Fragment {
-    public static final String QUOTE_KEY = "quote";
-    private static final String TAG = "MainChartFragment";
+
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
     private Button cancelButton, addButton, dateButton;
@@ -45,7 +43,6 @@ public class MainChartFragment extends Fragment {
     private Spinner spinner;
     private int day, month, year;
     private String date, monthName;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView tvDate;
 
 
@@ -65,6 +62,11 @@ public class MainChartFragment extends Fragment {
 
         ImageView imageView = getView().findViewById(R.id.imageViewMainFragmentAddExpense);
         imageView.setOnClickListener(view -> createNewDialog());
+
+        Button buttonSwitch = getView().findViewById(R.id.buttonMainFragmentSwitchEI);
+        buttonSwitch.setOnClickListener(v -> {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new IncomeFragment()).commit();
+        });
 
     }
 
@@ -118,14 +120,14 @@ public class MainChartFragment extends Fragment {
             }, year, month, day);
             datePickerDialog.show();
         });
-        addButton.setOnClickListener(v ->{
+        addButton.setOnClickListener(v -> {
             String value = valueExpenseEditText.getText().toString();
             String date = tvDate.getText().toString();
-            if(TextUtils.isEmpty(value)){
+            if (TextUtils.isEmpty(value)) {
                 valueExpenseEditText.setError("Nie może być puste");
-            }else if(TextUtils.isEmpty(date)){
+            } else if (TextUtils.isEmpty(date)) {
                 tvDate.setError("Nie może być puste");
-            }else{
+            } else {
                 insertData(date);
                 dialog.dismiss();
             }

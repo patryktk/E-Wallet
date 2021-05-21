@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_income"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/fragment_main_chart">
-
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageViewMainFragmentAddExpense"
+        android:id="@+id/imageViewIncomeAddExpense"
         android:layout_width="56dp"
         android:layout_height="58dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="524dp"
         android:src="@drawable/plus" />
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/chart"
-        android:layout_width="344dp"
-        android:layout_height="369dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="100dp" />
-
     <Button
-        android:id="@+id/buttonMainFragmentSwitchEI"
+        android:id="@+id/buttonIncomeSwitchEI2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Switch" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Expenses"
+        android:text="Income"
         android:layout_marginStart="160dp"/>
-
 </RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:orientation="vertical"
+    android:background="@color/cardview_dark_background"
+    android:layout_gravity="center"
+    android:padding="5dp">
+
+    <EditText
+        android:id="@+id/editTextIncomeNameAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextValueOfIncome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="value"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/tvIncomeDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Date" />
+
+    <Button
+        android:id="@+id/buttonIncomePopupCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DATE" />
+
+    <Button
+        android:id="@+id/buttonIncomePopupAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dodaj" />
+
+    <Button
+        android:id="@+id/buttonIncomePopupCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anuluj" />
+
+
+</LinearLayout>

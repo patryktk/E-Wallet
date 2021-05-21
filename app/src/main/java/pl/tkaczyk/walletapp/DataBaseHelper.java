@@ -13,40 +13,52 @@ import java.util.List;
 
 import pl.tkaczyk.walletapp.model.Categories;
 import pl.tkaczyk.walletapp.model.Expenses;
+import pl.tkaczyk.walletapp.model.Income;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String categoriesTable = "CATEGORIES_TABLE";
     public static final String categoriesName = "NAME";
+
     public static final String expensesTable = "EXPENSES_TABLE";
-    public static final String expensesTableValue = "VALUE";
-    public static final String expensesTableUserMail = "USER";
-    public static final String expensesTableDate = "DATE";
-    public static final String expensesTableDescription = "DESCRIPTION";
     public static final String expensesTableCategoryName = "CATEGORY";
-    public static final String expensesTableMonth = "MONTH";
+
+    public static final String incomeTable = "INCOME_TABLE";
+
+    public static final String tableValue = "VALUE";
+    public static final String tableUser = "USER";
+    public static final String tableDate = "DATE";
+    public static final String tableDescription = "DESCRIPTION";
+    public static final String tableMonth = "MONTH";
+
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "wallet.db", null, 1);
+        super(context, "wallet.db", null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE " + expensesTable + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " " + expensesTableValue + " VARCHAR ," +
+        String createTableExpenses = "CREATE TABLE " + expensesTable + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " " + tableValue + " VARCHAR ," +
                 " " + expensesTableCategoryName + " varchar," +
-                " " + expensesTableUserMail + " varchar," +
-                " " + expensesTableDate + " varchar," +
-                " " + expensesTableDescription + " varchar, " +
-                " " + expensesTableMonth + " varchar)";
-        String createSecondTableStatement = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar)";
+                " " + tableUser + " varchar," +
+                " " + tableDate + " varchar," +
+                " " + tableDescription + " varchar, " +
+                " " + tableMonth + " varchar)";
+        String createTableCategories = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar)";
+        String createTableIncome = "CREATE TABLE " + incomeTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + tableValue + " varchar , " + tableDate + " varchar, " + tableDescription + " varchar, " + tableMonth + " varchar)";
 
-        db.execSQL(createTableStatement);
-        db.execSQL(createSecondTableStatement);
+        db.execSQL(createTableExpenses);
+        db.execSQL(createTableCategories);
+        db.execSQL(createTableIncome);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + expensesTable);
+        db.execSQL("DROP TABLE IF EXISTS " + categoriesTable);
+        db.execSQL("DROP TABLE IF EXISTS " + incomeTable);
 
+        onCreate(db);
     }
 
     public boolean removeOne(String name) {
@@ -76,16 +88,34 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean addOne(Income income) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(tableValue, income.getValue());
+        cv.put(tableDate, income.getData());
+        cv.put(tableDescription, income.getDescription());
+        cv.put(tableMonth, income.getMonth());
+
+        long insert = db.insert(incomeTable, null, cv);
+
+        if (insert == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public boolean addOne(Expenses expenses) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(expensesTableValue, expenses.getValue());
+        cv.put(tableValue, expenses.getValue());
         cv.put(expensesTableCategoryName, expenses.getCategory());
-        cv.put(expensesTableUserMail, expenses.getUserMail());
-        cv.put(expensesTableDate, expenses.getDate());
-        cv.put(expensesTableDescription, expenses.getDescription());
-        cv.put(expensesTableMonth, expenses.getMonth());
+        cv.put(tableUser, expenses.getUserMail());
+        cv.put(tableDate, expenses.getDate());
+        cv.put(tableDescription, expenses.getDescription());
+        cv.put(tableMonth, expenses.getMonth());
 
 
         long insert = db.insert(expensesTable, null, cv);
@@ -114,23 +144,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return categoriesList;
     }
 
-    public Cursor getSumOfMoney(String month) {
-        String query = "SELECT sum(" + expensesTableValue + ") from " + expensesTable + " where " + expensesTableMonth + "=" + "'" + month + "'";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = null;
-        if (db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-    public String  getSumOfMoney1(String month) {
-        String query = "SELECT sum(" + expensesTableValue + ") from " + expensesTable + " where " + expensesTableMonth + "=" + "'" + month + "'";
+
+    public String getSumOfMoney(String month) {
+        String query = "SELECT sum(" + tableValue + ") from " + expensesTable + " where " + tableMonth + "=" + "'" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
         String money = "";
         if (db != null) {
             cursor1 = db.rawQuery(query, null);
-            if(cursor1.getCount() >0 ){
+            if (cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                money = cursor1.getString(0);
+            }
+        }
+        return money;
+    }
+    public String getSumOfIncome(String month) {
+        String query = "SELECT sum(" + tableValue + ") from " + incomeTable + " where " + tableMonth + "=" + "'" + month + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = null;
+        String money = "";
+        if (db != null) {
+            cursor1 = db.rawQuery(query, null);
+            if (cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 money = cursor1.getString(0);
             }
@@ -140,7 +176,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public Cursor getExpensesByMonth(String month) {
-        String query = "SELECT * from " + expensesTable + " WHERE " + expensesTableMonth + " = " + "'" + month + "'";
+        String query = "SELECT * from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    public Cursor getIncomeByMonth(String month) {
+        String query = "SELECT * from " + incomeTable + " WHERE " + tableMonth + " = " + "'" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;

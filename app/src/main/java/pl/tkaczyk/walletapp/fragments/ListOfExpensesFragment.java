@@ -29,7 +29,7 @@ public class ListOfExpensesFragment extends Fragment {
     ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListSumOfExpense;
     AdapterRVExpenses mAdapterRVExpenses;
     Button buttonExpenseMonthName;
-    String monthName, valueOfExpense;
+    String monthName;
     TextView textViewFragmentExpenseListRed;
 
 
@@ -51,7 +51,7 @@ public class ListOfExpensesFragment extends Fragment {
         db = new DataBaseHelper(getContext());
 
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfMoney1(currentMonth) + " zł ");
+        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfMoney(currentMonth) + " zł ");
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
         buttonExpenseMonthName.setText(currentMonth);
         mRecyclerView = view.findViewById(R.id.recyclerViewExpenses);
@@ -77,7 +77,7 @@ public class ListOfExpensesFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfMoney1(month) + " zł ");
+        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfMoney(month) + " zł ");
 
     }
 
