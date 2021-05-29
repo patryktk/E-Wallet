@@ -145,7 +145,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public String getSumOfMoney(String month) {
+    public String getSumOfExpenseByMonth(String month) {
         String query = "SELECT sum(" + tableValue + ") from " + expensesTable + " where " + tableMonth + "=" + "'" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
@@ -159,7 +159,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return money;
     }
-    public String getSumOfIncome(String month) {
+    public String getAllSumOfExpenses() {
+        String query = "SELECT sum(" + tableValue + ") from " + expensesTable;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = null;
+        String money = "";
+        if (db != null) {
+            cursor1 = db.rawQuery(query, null);
+            if (cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                money = cursor1.getString(0);
+            }
+        }
+        return money;
+    }
+    public String getSumOfIncomeByMonth(String month) {
         String query = "SELECT sum(" + tableValue + ") from " + incomeTable + " where " + tableMonth + "=" + "'" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
@@ -173,7 +187,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return money;
     }
+    public String getAllSumOfIncome() {
+        String query = "SELECT sum(" + tableValue + ") from " + incomeTable;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = null;
+        String money = "";
+        if (db != null) {
+            cursor1 = db.rawQuery(query, null);
+            if (cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                money = cursor1.getString(0);
+            }
+        }
+        return money;
+    }
 
+    public Cursor getExpensesByMonthChart(String month) {
+        String query = "SELECT sum("+tableValue+"), "+expensesTableCategoryName+" from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "' group by "+expensesTableCategoryName+"";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
 
     public Cursor getExpensesByMonth(String month) {
         String query = "SELECT * from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "'";

@@ -18,6 +18,13 @@
         android:layout_height="wrap_content"
         android:text="Switch" />
 
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart_income"
+        android:layout_width="344dp"
+        android:layout_height="369dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

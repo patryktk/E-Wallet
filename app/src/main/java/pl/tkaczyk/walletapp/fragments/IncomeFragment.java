@@ -2,6 +2,7 @@ package pl.tkaczyk.walletapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,9 +19,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import pl.tkaczyk.walletapp.DataBaseHelper;
@@ -36,6 +43,11 @@ public class IncomeFragment extends Fragment {
     private int day, month, year;
     private String date, monthName;
     private TextView tvDate;
+    DataBaseHelper db;
+    private PieChart mPieChart;
+    String saldo, currentMonth;
+
+
 
 
     @Nullable
@@ -47,6 +59,16 @@ public class IncomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        db = new DataBaseHelper(getContext());
+        currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        mPieChart = getView().findViewById(R.id.chart_income);
+
+        accountBalance();
+        setupPieChart(saldo);
+        makeChart(currentMonth);
+
+
         Button switchButton = getView().findViewById(R.id.buttonIncomeSwitchEI2);
         switchButton.setOnClickListener(v -> {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainChartFragment()).commit();
@@ -54,6 +76,75 @@ public class IncomeFragment extends Fragment {
 
         ImageView imageView = getView().findViewById(R.id.imageViewIncomeAddExpense);
         imageView.setOnClickListener(view -> createNewDialog());
+    }
+
+    private void accountBalance() {
+        db = new DataBaseHelper(getContext());
+
+        String x = db.getAllSumOfIncome();
+        if(x == null){
+            x = "0";
+        }
+        Integer plus = Integer.valueOf(x);
+        String y = db.getAllSumOfExpenses();
+        if(y == null){
+            y = "0";
+        }
+        Integer minus = Integer.valueOf(y);
+        Integer saldo1 = plus-minus;
+        saldo = saldo1.toString();
+        if(minus > plus){
+            saldo= "-" + saldo;
+        }
+
+    }
+
+    private void makeChart(String month) {
+        ArrayList<PieEntry> entries = new ArrayList<>();
+
+        String sumOfExpense = db.getSumOfExpenseByMonth(month);
+        if(sumOfExpense == null){
+            sumOfExpense = "0";
+        }
+        String sumOfIncome = db.getSumOfIncomeByMonth(month);
+        if(sumOfIncome == null){
+            sumOfIncome = "0";
+        }
+        entries.add(new PieEntry(Integer.valueOf(sumOfExpense), "Wydatki"));
+        entries.add(new PieEntry(Integer.valueOf(sumOfIncome), "Przychód"));
+
+        ArrayList<Integer> colors = new ArrayList<>();
+        for (int color : ColorTemplate.MATERIAL_COLORS) {
+            colors.add(color);
+        }
+        for (int color : ColorTemplate.VORDIPLOM_COLORS) {
+            colors.add(color);
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "Expense Category");
+        dataSet.setColors(colors);
+
+        PieData data = new PieData(dataSet);
+        data.setDrawValues(true);
+        data.setValueFormatter(new PercentFormatter(mPieChart));
+        data.setValueTextSize(12f);
+        data.setValueTextColor(Color.BLACK);
+
+        mPieChart.setData(data);
+        mPieChart.invalidate();
+    }
+
+    private void setupPieChart(String saldo1) {
+        mPieChart.setDrawHoleEnabled(true);
+        mPieChart.setUsePercentValues(true);
+        mPieChart.setEntryLabelTextSize(12);
+        mPieChart.setEntryLabelColor(Color.BLACK);
+        mPieChart.setCenterText(saldo1 + " zł");
+        mPieChart.setCenterTextSize(24);
+        mPieChart.getDescription().setEnabled(false);
+
+        Legend l = mPieChart.getLegend();
+        l.setEnabled(false);
     }
 
     private void createNewDialog() {
@@ -98,6 +189,9 @@ public class IncomeFragment extends Fragment {
                 tvDate.setError("Nie może być puste");
             } else {
                 insertData(date);
+                accountBalance();
+                setupPieChart(saldo);
+                makeChart(currentMonth);
                 dialog.dismiss();
             }
         });
@@ -151,18 +245,18 @@ public class IncomeFragment extends Fragment {
         return monthName;
     }
 
-    private void insertData(String date){
+    private void insertData(String date) {
         String valueOfIncome = valueIncomeEditText.getText().toString();
         String descriptionOfIncome = descriptionEditText.getText().toString();
 
         Income income;
-        income = new Income(-1,valueOfIncome, date, descriptionOfIncome, monthName);
+        income = new Income(-1, valueOfIncome, date, descriptionOfIncome, monthName);
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
         boolean success = dataBaseHelper.addOne(income);
-        if(success){
+        if (success) {
             Toast.makeText(getContext(), "Pomyślnie dodano", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             Toast.makeText(getContext(), "Dodanie nie powiodło się", Toast.LENGTH_SHORT).show();
         }
 

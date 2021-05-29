@@ -2,6 +2,8 @@ package pl.tkaczyk.walletapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,7 +23,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
@@ -36,6 +43,7 @@ import pl.tkaczyk.walletapp.model.Expenses;
 
 public class MainChartFragment extends Fragment {
 
+    DataBaseHelper db;
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
     private Button cancelButton, addButton, dateButton;
@@ -44,6 +52,9 @@ public class MainChartFragment extends Fragment {
     private int day, month, year;
     private String date, monthName;
     private TextView tvDate;
+    private PieChart mPieChart;
+    String saldo,currentMonth;
+
 
 
     @Nullable
@@ -55,10 +66,14 @@ public class MainChartFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        PieChart mPieChart = getView().findViewById(R.id.chart);
-        makeChart(mPieChart);
-
+        db = new DataBaseHelper(getContext());
+        currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        mPieChart = getView().findViewById(R.id.chart);
         primaryCategories();
+
+        accountBalance();
+        setupPieChart(saldo);
+        makeChart(currentMonth);
 
         ImageView imageView = getView().findViewById(R.id.imageViewMainFragmentAddExpense);
         imageView.setOnClickListener(view -> createNewDialog());
@@ -67,6 +82,28 @@ public class MainChartFragment extends Fragment {
         buttonSwitch.setOnClickListener(v -> {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new IncomeFragment()).commit();
         });
+
+    }
+
+    private void accountBalance() {
+        db = new DataBaseHelper(getContext());
+
+        String x = db.getAllSumOfIncome();
+        if(x == null){
+            x = "0";
+        }
+        Integer plus = Integer.valueOf(x);
+        String y = db.getAllSumOfExpenses();
+        if(y == null){
+            y = "0";
+        }
+        Integer minus = Integer.valueOf(y);
+
+        Integer saldo1 = plus - minus;
+        saldo = saldo1.toString();
+        if(minus > plus){
+            saldo = "-" + saldo;
+        }
 
     }
 
@@ -129,6 +166,9 @@ public class MainChartFragment extends Fragment {
                 tvDate.setError("Nie może być puste");
             } else {
                 insertData(date);
+                accountBalance();
+                setupPieChart(saldo);
+                makeChart(currentMonth);
                 dialog.dismiss();
             }
         });
@@ -211,49 +251,46 @@ public class MainChartFragment extends Fragment {
     }
 
 
-    void makeChart(PieChart mPieChart) {
+    void makeChart(String month) {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
+        Cursor cursor = db.getExpensesByMonthChart(month);
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToNext();
+            entries.add(new PieEntry(cursor.getInt(0), cursor.getString(1)));
+        }
 
-//        db.collection("expenses").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Log.d(TAG, "onComplete show document data: " + document.getData());
-//                    }
-//                }
-//            }
-//        });
-//
-//        DocumentReference mDocumentReference = FirebaseFirestore.getInstance().document("sampleData/inspiration");
-//        ArrayList<PieEntry> data = new ArrayList<>();
-//        mDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//                    Log.d(TAG, "onComplete: Good");
-//                } else {
-//                    Log.d(TAG, "onComplete: Fail");
-//                }
-//            }
-//        });
-//        mDocumentReference.get().addOnSuccessListener(documentSnapshot -> {
-//
-//            data.add(new PieEntry(20, documentSnapshot.getString(QUOTE_KEY)));
-//
-//            PieDataSet pieDataSet = new PieDataSet(data, "Wydatki");
-//            pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-//            pieDataSet.setValueTextColor(Color.BLACK);
-//            pieDataSet.setValueTextSize(16f);
-//
-//            PieData pieData = new PieData(pieDataSet);
-//
-//            mPieChart.setData(pieData);
-//            mPieChart.getDescription().setEnabled(false);
-//            mPieChart.setCenterText("Wydatki");
-//            mPieChart.animate();
-//        });
+        ArrayList<Integer> colors = new ArrayList<>();
+        for (int color : ColorTemplate.MATERIAL_COLORS) {
+            colors.add(color);
+        }
+        for (int color : ColorTemplate.VORDIPLOM_COLORS) {
+            colors.add(color);
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "Expense Category");
+        dataSet.setColors(colors);
+
+        PieData data = new PieData(dataSet);
+        data.setDrawValues(true);
+        data.setValueFormatter(new PercentFormatter(mPieChart));
+        data.setValueTextSize(12f);
+        data.setValueTextColor(Color.BLACK);
+
+        mPieChart.setData(data);
+        mPieChart.invalidate();
+    }
+
+    void setupPieChart(String  saldo1) {
+        mPieChart.setDrawHoleEnabled(true);
+        mPieChart.setUsePercentValues(true);
+        mPieChart.setEntryLabelTextSize(12);
+        mPieChart.setEntryLabelColor(Color.BLACK);
+        mPieChart.setCenterText(saldo1 + " zł");
+        mPieChart.setCenterTextSize(24);
+        mPieChart.getDescription().setEnabled(false);
+
+        Legend l = mPieChart.getLegend();
+        l.setEnabled(false);
     }
 }

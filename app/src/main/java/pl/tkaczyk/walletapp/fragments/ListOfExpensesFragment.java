@@ -26,11 +26,12 @@ import pl.tkaczyk.walletapp.adapter.AdapterRVExpenses;
 public class ListOfExpensesFragment extends Fragment {
     RecyclerView mRecyclerView;
     DataBaseHelper db;
-    ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListSumOfExpense;
+    ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory;
+    ArrayList<String> arrayListIncomeValue, arrayListIncomeDate, arrayListIncomeCategory;
     AdapterRVExpenses mAdapterRVExpenses;
     Button buttonExpenseMonthName;
     String monthName;
-    TextView textViewFragmentExpenseListRed;
+    TextView textViewFragmentExpenseListRed, textViewFragmentExpenseListGreen;
 
 
     @Override
@@ -51,7 +52,9 @@ public class ListOfExpensesFragment extends Fragment {
         db = new DataBaseHelper(getContext());
 
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfMoney(currentMonth) + " zł ");
+        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(currentMonth) + " zł ");
+        textViewFragmentExpenseListGreen = view.findViewById(R.id.textViewFragmentExpenseListGreen);
+        textViewFragmentExpenseListGreen.setText(" + " + db.getSumOfIncomeByMonth(currentMonth) + " zł ");
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
         buttonExpenseMonthName.setText(currentMonth);
         mRecyclerView = view.findViewById(R.id.recyclerViewExpenses);
@@ -72,12 +75,17 @@ public class ListOfExpensesFragment extends Fragment {
         arrayListExpenseDate = new ArrayList<>();
         storeDataInArrays(month);
 
+        arrayListIncomeCategory = new ArrayList<>();
+        arrayListIncomeDate = new ArrayList<>();
+        arrayListIncomeValue = new ArrayList<>();
+        storeIncomeDataInArray(month);
+
 
         mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfMoney(month) + " zł ");
+        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month) + " zł ");
 
     }
 
@@ -152,6 +160,19 @@ public class ListOfExpensesFragment extends Fragment {
                 arrayListExpensesValue.add("- " + cursor.getString(1) + " zł");
                 arrayListExpenseCategory.add(cursor.getString(2));
                 arrayListExpenseDate.add(cursor.getString(4));
+            }
+        }
+    }
+
+    private void storeIncomeDataInArray(String month){
+        Cursor cursor = db.getIncomeByMonth(month);
+        if (cursor.getCount() == 0) {
+            Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                arrayListIncomeValue.add("+ " + cursor.getString(1) + " zł");
+                arrayListIncomeDate.add(cursor.getString(2));
+                arrayListIncomeCategory.add("Przychód");
             }
         }
     }
