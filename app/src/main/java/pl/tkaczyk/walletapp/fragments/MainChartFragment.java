@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import pl.tkaczyk.walletapp.DataBaseHelper;
+import pl.tkaczyk.walletapp.DecimalDigitalFilter;
 import pl.tkaczyk.walletapp.R;
 import pl.tkaczyk.walletapp.model.Categories;
 import pl.tkaczyk.walletapp.model.Expenses;
@@ -88,19 +90,24 @@ public class MainChartFragment extends Fragment {
     private void accountBalance() {
         db = new DataBaseHelper(getContext());
 
-        String x = db.getAllSumOfIncome();
-        if(x == null){
-            x = "0";
-        }
-        Integer plus = Integer.valueOf(x);
-        String y = db.getAllSumOfExpenses();
-        if(y == null){
-            y = "0";
-        }
-        Integer minus = Integer.valueOf(y);
+//        String x = db.getAllSumOfIncome();
+//        if(x == null){
+//            x = "0";
+//        }
+//        Double plus = Double.valueOf(x);
+        Double plus = db.getAllSumOfIncome2();
+//        String y = db.getAllSumOfExpenses();
+//        if(y == null){
+//            y = "0";
+//        }
+//        Double minus = Double.valueOf(y);
+        Double minus = db.getAllSumOfExpenses2();
 
-        Integer saldo1 = plus - minus;
-        saldo = saldo1.toString();
+        Double saldo1 = plus - minus;
+//        String.format("%.2f", saldo1);
+//        System.out.format("%,.2f%n",saldo1);
+//        saldo = saldo1.toString();
+        saldo = String.format("%.2f", saldo1);
         if(minus > plus){
             saldo = "-" + saldo;
         }
@@ -138,6 +145,8 @@ public class MainChartFragment extends Fragment {
         dateButton = (Button) popupView.findViewById(R.id.buttonPopupCalendar);
         tvDate = (TextView) popupView.findViewById(R.id.tvDate);
         descriptionEditText = (EditText) popupView.findViewById(R.id.editTextExpenseNameAdd);
+
+        valueExpenseEditText.setFilters(new InputFilter[]{new DecimalDigitalFilter()});
 
         dateButton.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
@@ -223,7 +232,7 @@ public class MainChartFragment extends Fragment {
 
 
     private void insertData(String date) {
-        String valueOfExpense = valueExpenseEditText.getText().toString();
+        Double valueOfExpense = Double.parseDouble(valueExpenseEditText.getText().toString());
         String categoryOfExpense = spinner.getSelectedItem().toString();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String descriptionOfExpense = descriptionEditText.getText().toString();

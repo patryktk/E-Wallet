@@ -2,12 +2,13 @@ package pl.tkaczyk.walletapp.model;
 
 public class Expenses {
     int id;
-    String value,category, userMail, date, description, month;
+    String category, userMail, date, description, month;
+    Double value;
 
     public Expenses() {
     }
 
-    public Expenses(int id, String value, String category, String userMail, String date, String description, String month) {
+    public Expenses(int id, Double value, String category, String userMail, String date, String description, String month) {
         this.id = id;
         this.value = value;
         this.category = category;
@@ -25,11 +26,11 @@ public class Expenses {
         this.id = id;
     }
 
-    public String getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
