@@ -51,10 +51,13 @@ public class ListOfExpensesFragment extends Fragment {
         String currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
         db = new DataBaseHelper(getContext());
 
+
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(currentMonth) + " zł ");
+        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth);
+        textViewFragmentExpenseListRed.setText(" - " +  sumOfExpense + " zł ");
         textViewFragmentExpenseListGreen = view.findViewById(R.id.textViewFragmentExpenseListGreen);
-        textViewFragmentExpenseListGreen.setText(" + " + db.getSumOfIncomeByMonth(currentMonth) + " zł ");
+        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth);
+        textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
         buttonExpenseMonthName.setText(currentMonth);
         mRecyclerView = view.findViewById(R.id.recyclerViewExpenses);
@@ -164,7 +167,7 @@ public class ListOfExpensesFragment extends Fragment {
         }
     }
 
-    private void storeIncomeDataInArray(String month){
+    private void storeIncomeDataInArray(String month) {
         Cursor cursor = db.getIncomeByMonth(month);
         if (cursor.getCount() == 0) {
             Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();

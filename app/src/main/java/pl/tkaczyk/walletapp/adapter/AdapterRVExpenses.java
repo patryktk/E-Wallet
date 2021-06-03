@@ -4,10 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +22,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
 
     private Context mContext;
     private ArrayList arrayExpenseValue, arrayExpenseDate, arrayExpenseCategory;
+    private FloatingActionButton deleteButton;
 
     public AdapterRVExpenses(Context context, ArrayList arrayExpenseValue, ArrayList arrayExpenseDate, ArrayList arrayExpenseCategory) {
         this.mContext = context;
@@ -52,12 +56,19 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView expenseValue, expenseDate, expenseCategory;
+        FloatingActionButton deleteButton;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             expenseValue = itemView.findViewById(R.id.textViewExpenseRowValue);
             expenseDate = itemView.findViewById(R.id.textViewExpenseRowDate);
             expenseCategory = itemView.findViewById(R.id.textViewExpenseRowCategory);
+
+            deleteButton = itemView.findViewById(R.id.floatingActionButtonRemoveExpense);
+            deleteButton.setOnClickListener(v ->{
+                int position = getAdapterPosition();
+
+            });
         }
     }
 }

@@ -103,20 +103,23 @@ public class IncomeFragment extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
 //        String sumOfExpense = db.getSumOfExpenseByMonth(month);
-        Double sumOfExpense = db.getSumOfExpenseByMonth2(month);
 //        if(sumOfExpense == null){
 //            sumOfExpense = "0";
 //        }
 //        String sumOfIncome = db.getSumOfIncomeByMonth(month);
-        Double sumOfIncome = db.getSumOfIncomeByMonth2(month);
 //        if(sumOfIncome == null){
 //            sumOfIncome = "0";
 //        }
 //        entries.add(new PieEntry(Integer.valueOf(sumOfExpense), "Wydatki"));
 //        entries.add(new PieEntry(Integer.valueOf(sumOfIncome), "Przychód"));
-        entries.add(new PieEntry(sumOfExpense.intValue(), "Wydatki"));
-        entries.add(new PieEntry(sumOfIncome.intValue(), "Przychód"));
-
+        Double sumOfExpense = db.getSumOfExpenseByMonth2(month);
+        Double sumOfIncome = db.getSumOfIncomeByMonth2(month);
+        if(sumOfExpense == 0 || sumOfIncome  == 0){
+            entries.add(new PieEntry(1, ""));
+        }else{
+            entries.add(new PieEntry(sumOfExpense.intValue(), "Wydatki"));
+            entries.add(new PieEntry(sumOfIncome.intValue(), "Przychód"));
+        }
         ArrayList<Integer> colors = new ArrayList<>();
         for (int color : ColorTemplate.MATERIAL_COLORS) {
             colors.add(color);

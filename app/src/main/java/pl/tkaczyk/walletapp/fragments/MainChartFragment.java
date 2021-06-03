@@ -2,6 +2,7 @@ package pl.tkaczyk.walletapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import pl.tkaczyk.walletapp.model.Expenses;
 public class MainChartFragment extends Fragment {
 
     DataBaseHelper db;
+    String saldo, currentMonth;
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
     private Button cancelButton, addButton, dateButton;
@@ -55,9 +57,6 @@ public class MainChartFragment extends Fragment {
     private String date, monthName;
     private TextView tvDate;
     private PieChart mPieChart;
-    String saldo,currentMonth;
-
-
 
     @Nullable
     @Override
@@ -108,7 +107,7 @@ public class MainChartFragment extends Fragment {
 //        System.out.format("%,.2f%n",saldo1);
 //        saldo = saldo1.toString();
         saldo = String.format("%.2f", saldo1);
-        if(minus > plus){
+        if (minus > plus) {
             saldo = "-" + saldo;
         }
 
@@ -264,9 +263,23 @@ public class MainChartFragment extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         Cursor cursor = db.getExpensesByMonthChart(month);
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToNext();
-            entries.add(new PieEntry(cursor.getInt(0), cursor.getString(1)));
+        if (cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToNext();
+                entries.add(new PieEntry(cursor.getInt(0), cursor.getString(1)));
+            }
+        } else {
+                entries.add(new PieEntry(1, ""));
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setTitle("Pierwsze uruchomienie");
+            alert.setMessage("Wykres będzie się zapełniał w miarę dodawania wydatków");
+            alert.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getContext(), "Miłego Korzystania z aplikacji!", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alert.show();
         }
 
         ArrayList<Integer> colors = new ArrayList<>();
@@ -290,7 +303,7 @@ public class MainChartFragment extends Fragment {
         mPieChart.invalidate();
     }
 
-    void setupPieChart(String  saldo1) {
+    void setupPieChart(String saldo1) {
         mPieChart.setDrawHoleEnabled(true);
         mPieChart.setUsePercentValues(true);
         mPieChart.setEntryLabelTextSize(12);
