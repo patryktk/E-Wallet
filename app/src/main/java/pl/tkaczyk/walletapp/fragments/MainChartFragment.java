@@ -89,23 +89,9 @@ public class MainChartFragment extends Fragment {
     private void accountBalance() {
         db = new DataBaseHelper(getContext());
 
-//        String x = db.getAllSumOfIncome();
-//        if(x == null){
-//            x = "0";
-//        }
-//        Double plus = Double.valueOf(x);
         Double plus = db.getAllSumOfIncome2();
-//        String y = db.getAllSumOfExpenses();
-//        if(y == null){
-//            y = "0";
-//        }
-//        Double minus = Double.valueOf(y);
         Double minus = db.getAllSumOfExpenses2();
-
         Double saldo1 = plus - minus;
-//        String.format("%.2f", saldo1);
-//        System.out.format("%,.2f%n",saldo1);
-//        saldo = saldo1.toString();
         saldo = String.format("%.2f", saldo1);
         if (minus > plus) {
             saldo = "-" + saldo;

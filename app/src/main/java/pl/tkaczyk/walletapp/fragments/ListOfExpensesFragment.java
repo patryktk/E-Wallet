@@ -1,5 +1,6 @@
 package pl.tkaczyk.walletapp.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +28,7 @@ import pl.tkaczyk.walletapp.adapter.AdapterRVExpenses;
 public class ListOfExpensesFragment extends Fragment {
     RecyclerView mRecyclerView;
     DataBaseHelper db;
-    ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory;
+    ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseId, arrayListExpenseDescription, arrayListExpenseMonth;
     ArrayList<String> arrayListIncomeValue, arrayListIncomeDate, arrayListIncomeCategory;
     AdapterRVExpenses mAdapterRVExpenses;
     Button buttonExpenseMonthName;
@@ -54,7 +56,7 @@ public class ListOfExpensesFragment extends Fragment {
 
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
         double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth);
-        textViewFragmentExpenseListRed.setText(" - " +  sumOfExpense + " zł ");
+        textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
         textViewFragmentExpenseListGreen = view.findViewById(R.id.textViewFragmentExpenseListGreen);
         double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth);
         textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
@@ -73,9 +75,12 @@ public class ListOfExpensesFragment extends Fragment {
     }
 
     public void listOfExpenses(View view, String month) {
+        arrayListExpenseId = new ArrayList<>();
         arrayListExpenseCategory = new ArrayList<>();
         arrayListExpensesValue = new ArrayList<>();
         arrayListExpenseDate = new ArrayList<>();
+        arrayListExpenseDescription = new ArrayList<>();
+        arrayListExpenseMonth = new ArrayList<>();
         storeDataInArrays(month);
 
         arrayListIncomeCategory = new ArrayList<>();
@@ -84,7 +89,7 @@ public class ListOfExpensesFragment extends Fragment {
         storeIncomeDataInArray(month);
 
 
-        mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory);
+        mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpenseId,arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseDescription, arrayListExpenseMonth);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -160,9 +165,12 @@ public class ListOfExpensesFragment extends Fragment {
             Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
-                arrayListExpensesValue.add("- " + cursor.getString(1) + " zł");
+                arrayListExpenseId.add(cursor.getString(0));
+                arrayListExpensesValue.add(cursor.getString(1));
                 arrayListExpenseCategory.add(cursor.getString(2));
                 arrayListExpenseDate.add(cursor.getString(4));
+                arrayListExpenseDescription.add(cursor.getString(5));
+                arrayListExpenseMonth.add(cursor.getString(6));
             }
         }
     }

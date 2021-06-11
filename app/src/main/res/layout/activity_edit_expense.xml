@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditExpense">
+
+    <Button
+        android:id="@+id/buttonEditExpenseEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:text="Edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEditExpenseDate" />
+
+    <EditText
+        android:id="@+id/editTextEditExpenseDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEditExpenseValue"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextEditExpenseValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Value"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEditExpenseDescription" />
+
+    <TextView
+        android:id="@+id/tvEditExpenseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Date"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEditExpenseValue"
+        app:layout_constraintStart_toStartOf="@+id/editTextEditExpenseValue"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEditExpenseValue" />
+
+    <Button
+        android:id="@+id/buttonEditExpenseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Date"
+        app:layout_constraintEnd_toEndOf="@+id/tvEditExpenseDate"
+        app:layout_constraintStart_toStartOf="@+id/tvEditExpenseDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvEditExpenseDate" />
+
+    <Button
+        android:id="@+id/buttonEditExpenseDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Remove"
+        app:layout_constraintEnd_toEndOf="@+id/buttonEditExpenseEdit"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/buttonEditExpenseEdit"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEditExpenseEdit" />
+
+    <Spinner
+        android:id="@+id/spinnerEditExpense"
+        android:layout_width="379dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEditExpenseEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEditExpenseDate"
+        app:layout_constraintVertical_bias="0.55" />
+</androidx.constraintlayout.widget.ConstraintLayout>

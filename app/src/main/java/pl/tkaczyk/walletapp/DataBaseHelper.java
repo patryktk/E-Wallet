@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -127,6 +128,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    void updateExpense(String row_id, Double value, String category, String date, String description, String month){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(tableValue,value);
+        cv.put(expensesTableCategoryName,category);
+        cv.put(tableDate,date);
+        cv.put(tableDescription,description);
+        cv.put(tableMonth,month);
+
+        long result = db.update(expensesTable, cv, "ID=?", new String[]{row_id});
+        if(result == -1){
+
+        }
+    }
+
     public List<String> getAllCategories() {
         List<String> categoriesList = new ArrayList<>();
 
@@ -142,6 +159,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return categoriesList;
+    }
+
+    public int getIdCategoriesByName(String name) {
+        int id = 0;
+
+        String query = "SELECT ID FROM " + categoriesTable + " WHERE " + categoriesName + "=" + "'" + name + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return id;
     }
 
 
@@ -174,6 +206,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return money;
     }
+
     public Double getSumOfIncomeByMonth2(String month) {
         String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + incomeTable + " where " + tableMonth + "=" + "'" + month + "'";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -310,5 +343,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
 
 }
