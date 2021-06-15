@@ -1,7 +1,8 @@
 package pl.tkaczyk.walletapp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,14 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import pl.tkaczyk.walletapp.fragments.ListOfExpensesFragment;
-
-public class EditExpense extends AppCompatActivity {
+public class EditExpenseActivity extends AppCompatActivity {
 
     EditText editTextValue, editTextDescription;
     TextView tvDate;
@@ -30,9 +29,8 @@ public class EditExpense extends AppCompatActivity {
 
     String id, category, date, description, month;
     Double value;
-    private int calendarDay, calendarMonth, calendarYear;
     String calendarDate, monthName;
-
+    private int calendarDay, calendarMonth, calendarYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +58,15 @@ public class EditExpense extends AppCompatActivity {
                 calendarMonth = calendar.get(Calendar.MONTH);
                 calendarYear = calendar.get(Calendar.YEAR);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditExpense.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EditExpenseActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        month = month +1;
+                        month = month + 1;
                         calendarDate = dayOfMonth + "/" + month + "/" + year;
                         tvDate.setText(calendarDate);
                         monthName = pickMonth(month);
                     }
-                },calendarYear, calendarMonth, calendarDay);
+                }, calendarYear, calendarMonth, calendarDay);
                 datePickerDialog.show();
             }
         });
@@ -79,9 +77,35 @@ public class EditExpense extends AppCompatActivity {
                 category = spinner.getSelectedItem().toString();
                 date = tvDate.getText().toString();
                 description = editTextDescription.getText().toString();
-                db.updateExpense(id,value,category,date,description,monthName);
+                db.updateExpense(id, value, category, date, description, monthName);
             }
         });
+        deleteButton.setOnClickListener(V ->{
+            confirmDeleteDialog();
+        });
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationOnClickListener(v ->
+                onBackPressed());
+    }
+    void confirmDeleteDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete expense?");
+        builder.setMessage("Jesteś pewny że chcesz usunać ten wydatek?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.deleteOneExpense(id);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
     }
 
     private String pickMonth(int month) {

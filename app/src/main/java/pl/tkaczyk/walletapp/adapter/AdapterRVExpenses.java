@@ -1,6 +1,5 @@
 package pl.tkaczyk.walletapp.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import pl.tkaczyk.walletapp.EditExpense;
+import pl.tkaczyk.walletapp.EditExpenseActivity;
 import pl.tkaczyk.walletapp.R;
 
 public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.ViewHolder> {
@@ -55,7 +54,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
         viewHolder.expenseRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, EditExpense.class);
+                Intent intent = new Intent(mContext, EditExpenseActivity.class);
                 intent.putExtra("Id", String.valueOf(arrayExpenseId.get(position)));
                 intent.putExtra("Value", String.valueOf(arrayExpenseValue.get(position)));
                 intent.putExtra("Category", String.valueOf(arrayExpenseCategory.get(position)));

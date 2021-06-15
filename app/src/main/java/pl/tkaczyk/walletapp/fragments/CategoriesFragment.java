@@ -133,7 +133,7 @@ public class CategoriesFragment extends Fragment {
             if(categoryName.isEmpty()){
                 Toast.makeText(getContext(), "Uzupełnij pole nazwy", Toast.LENGTH_SHORT).show();
             }else{
-                db.removeOne(categoryName);
+                db.removeOneCategory(categoryName);
                 Toast.makeText(getContext(), "Pomyślnie usunięto", Toast.LENGTH_SHORT).show();
                 xxx(categoriesName, view);
                 dialog.dismiss();

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -62,7 +61,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean removeOne(String name) {
+    public boolean removeOneCategory(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM " + categoriesTable + " WHERE " + categoriesName + " = " + "'" + name + "'";
 
@@ -71,6 +70,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public boolean deleteOneExpense(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(expensesTable, "id=?", new String[]{id});
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -128,18 +137,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    void updateExpense(String row_id, Double value, String category, String date, String description, String month){
+    void updateExpense(String row_id, Double value, String category, String date, String description, String month) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(tableValue,value);
-        cv.put(expensesTableCategoryName,category);
-        cv.put(tableDate,date);
-        cv.put(tableDescription,description);
-        cv.put(tableMonth,month);
+        cv.put(tableValue, value);
+        cv.put(expensesTableCategoryName, category);
+        cv.put(tableDate, date);
+        cv.put(tableDescription, description);
+        cv.put(tableMonth, month);
 
         long result = db.update(expensesTable, cv, "ID=?", new String[]{row_id});
-        if(result == -1){
+        if (result == -1) {
 
         }
     }
@@ -343,6 +352,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
-
 
 }

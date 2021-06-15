@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_main_chart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/fragment_main_chart">
+    android:background="@color/white">
 
+
+    <ImageView
+        android:id="@+id/noDataMainImg"
+        android:layout_width="141dp"
+        android:layout_height="133dp"
+        android:layout_alignStart="@+id/chart"
+        android:layout_alignTop="@+id/chart"
+        android:layout_alignEnd="@+id/chart"
+        android:layout_alignBottom="@+id/chart"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="80dp"
+        android:alpha="0.1"
+        android:layout_marginBottom="180dp"
+        app:srcCompat="@drawable/ic_emptyimg" />
+
+    <TextView
+        android:id="@+id/noDataMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/noDataMainImg"
+        android:layout_alignTop="@+id/noDataMainImg"
+        android:layout_alignEnd="@+id/noDataMainImg"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="0dp"
+        android:text="No Data. Add Expense"
+        android:textAlignment="center" />
 
     <ImageView
         android:id="@+id/imageViewMainFragmentAddExpense"
@@ -26,12 +55,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Switch" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Expenses"
-        android:layout_marginStart="160dp"/>
+        android:layout_marginStart="160dp"
+        android:text="Expenses" />
 
 
 </RelativeLayout>

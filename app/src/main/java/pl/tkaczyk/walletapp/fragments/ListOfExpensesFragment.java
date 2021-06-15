@@ -1,16 +1,15 @@
 package pl.tkaczyk.walletapp.fragments;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +32,8 @@ public class ListOfExpensesFragment extends Fragment {
     AdapterRVExpenses mAdapterRVExpenses;
     Button buttonExpenseMonthName;
     String monthName;
-    TextView textViewFragmentExpenseListRed, textViewFragmentExpenseListGreen;
+    TextView textViewFragmentExpenseListRed, textViewFragmentExpenseListGreen, noData;
+    ImageView emptyImage;
 
 
     @Override
@@ -44,7 +44,8 @@ public class ListOfExpensesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        String currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        listOfExpenses(getView(), currentMonth);
     }
 
     @Override
@@ -63,6 +64,8 @@ public class ListOfExpensesFragment extends Fragment {
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
         buttonExpenseMonthName.setText(currentMonth);
         mRecyclerView = view.findViewById(R.id.recyclerViewExpenses);
+        emptyImage = view.findViewById(R.id.empty_imageview);
+        noData = view.findViewById(R.id.noData);
 
 
         buttonExpenseMonthName.setOnClickListener(v -> {
@@ -89,7 +92,7 @@ public class ListOfExpensesFragment extends Fragment {
         storeIncomeDataInArray(month);
 
 
-        mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpenseId,arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseDescription, arrayListExpenseMonth);
+        mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpenseId, arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseDescription, arrayListExpenseMonth);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -162,7 +165,8 @@ public class ListOfExpensesFragment extends Fragment {
     private void storeDataInArrays(String month) {
         Cursor cursor = db.getExpensesByMonth(month);
         if (cursor.getCount() == 0) {
-            Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();
+            emptyImage.setVisibility(View.VISIBLE);
+            noData.setVisibility(View.VISIBLE);
         } else {
             while (cursor.moveToNext()) {
                 arrayListExpenseId.add(cursor.getString(0));
@@ -172,6 +176,8 @@ public class ListOfExpensesFragment extends Fragment {
                 arrayListExpenseDescription.add(cursor.getString(5));
                 arrayListExpenseMonth.add(cursor.getString(6));
             }
+            emptyImage.setVisibility(View.GONE);
+            noData.setVisibility(View.GONE);
         }
     }
 

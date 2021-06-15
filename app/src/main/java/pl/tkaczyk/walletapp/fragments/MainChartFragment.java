@@ -55,8 +55,9 @@ public class MainChartFragment extends Fragment {
     private Spinner spinner;
     private int day, month, year;
     private String date, monthName;
-    private TextView tvDate;
+    private TextView tvDate, noData;
     private PieChart mPieChart;
+    ImageView noDataImg;
 
     @Nullable
     @Override
@@ -70,11 +71,13 @@ public class MainChartFragment extends Fragment {
         db = new DataBaseHelper(getContext());
         currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
         mPieChart = getView().findViewById(R.id.chart);
+        noData = getView().findViewById(R.id.noDataMain);
+        noDataImg = getView().findViewById(R.id.noDataMainImg);
         primaryCategories();
 
         accountBalance();
-        setupPieChart(saldo);
-        makeChart(currentMonth);
+        setup(currentMonth,saldo);
+
 
         ImageView imageView = getView().findViewById(R.id.imageViewMainFragmentAddExpense);
         imageView.setOnClickListener(view -> createNewDialog());
@@ -84,6 +87,29 @@ public class MainChartFragment extends Fragment {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new IncomeFragment()).commit();
         });
 
+    }
+    void setup(String month, String saldo){
+        Cursor cursor = db.getExpensesByMonthChart(month);
+        if(cursor.getCount()>0){
+            noData.setVisibility(View.GONE);
+            noDataImg.setVisibility(View.GONE);
+            setupPieChart(saldo);
+            makeChart(month);
+        }else{
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setTitle("Pierwsze uruchomienie");
+            alert.setMessage("Wykres będzie się zapełniał w miarę dodawania wydatków");
+            alert.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getContext(), "Miłego Korzystania z aplikacji!", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alert.show();
+            noData.setVisibility(View.VISIBLE);
+            noDataImg.setVisibility(View.VISIBLE);
+            mPieChart.setNoDataText("");
+        }
     }
 
     private void accountBalance() {
@@ -255,17 +281,7 @@ public class MainChartFragment extends Fragment {
                 entries.add(new PieEntry(cursor.getInt(0), cursor.getString(1)));
             }
         } else {
-                entries.add(new PieEntry(1, ""));
-            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-            alert.setTitle("Pierwsze uruchomienie");
-            alert.setMessage("Wykres będzie się zapełniał w miarę dodawania wydatków");
-            alert.setPositiveButton("Close", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getContext(), "Miłego Korzystania z aplikacji!", Toast.LENGTH_SHORT).show();
-                }
-            });
-            alert.show();
+            entries.add(new PieEntry(1, ""));
         }
 
         ArrayList<Integer> colors = new ArrayList<>();
