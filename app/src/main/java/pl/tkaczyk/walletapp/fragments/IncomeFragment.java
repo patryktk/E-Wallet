@@ -77,21 +77,10 @@ public class IncomeFragment extends Fragment {
 
     private void accountBalance() {
         db = new DataBaseHelper(getContext());
-
-//        String x = db.getAllSumOfIncome();
-//        if(x == null){
-//            x = "0";
-//        }
-//        Integer plus = Integer.valueOf(x);
-//        String y = db.getAllSumOfExpenses();
-//        if(y == null){
-//            y = "0";
-//        }
-//        Integer minus = Integer.valueOf(y);
         Double plus = db.getAllSumOfIncome2();
         Double minus = db.getAllSumOfExpenses2();
         Double saldo1 = plus - minus;
-//        saldo = saldo1.toString();
+
         saldo = String.format("%.2f", saldo1);
         if (minus > plus) {
             saldo = "-" + saldo;
@@ -102,16 +91,6 @@ public class IncomeFragment extends Fragment {
     private void makeChart(String month) {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
-//        String sumOfExpense = db.getSumOfExpenseByMonth(month);
-//        if(sumOfExpense == null){
-//            sumOfExpense = "0";
-//        }
-//        String sumOfIncome = db.getSumOfIncomeByMonth(month);
-//        if(sumOfIncome == null){
-//            sumOfIncome = "0";
-//        }
-//        entries.add(new PieEntry(Integer.valueOf(sumOfExpense), "Wydatki"));
-//        entries.add(new PieEntry(Integer.valueOf(sumOfIncome), "Przychód"));
         Double sumOfExpense = db.getSumOfExpenseByMonth2(month);
         Double sumOfIncome = db.getSumOfIncomeByMonth2(month);
         if(sumOfExpense == 0 || sumOfIncome  == 0){

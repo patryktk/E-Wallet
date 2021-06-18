@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.BudgetFragment">
+
+    <TextView
+        android:id="@+id/textViewBudgetIncomeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Przychód"
+        android:layout_marginTop="423dp"/>
+    <TextView
+        android:id="@+id/textViewBudgetIncomeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2000zł"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="423dp"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="404dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewBudget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="464dp" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</RelativeLayout>

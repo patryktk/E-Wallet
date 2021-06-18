@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import pl.tkaczyk.walletapp.fragments.BudgetFragment;
 import pl.tkaczyk.walletapp.fragments.CategoriesFragment;
 import pl.tkaczyk.walletapp.fragments.ListOfExpensesFragment;
 import pl.tkaczyk.walletapp.fragments.MainChartFragment;
@@ -77,6 +78,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_expenses:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListOfExpensesFragment()).commit();
+                break;
+            case R.id.nav_budget:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BudgetFragment()).commit();
                 break;
         }
 
