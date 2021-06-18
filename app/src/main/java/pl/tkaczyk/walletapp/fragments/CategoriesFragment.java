@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class CategoriesFragment extends Fragment {
     EditText editTextCategoryNameAdd, editTextCategoryNameRemove;
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
+    GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
 
     @Nullable
     @Override
@@ -100,14 +103,17 @@ public class CategoriesFragment extends Fragment {
 
         addButton = popupView.findViewById(R.id.buttonCategoriesPopupAdd);
         editTextCategoryNameAdd = popupView.findViewById(R.id.editTextPopupCategoriesAdd);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+
 
 
         addButton.setOnClickListener(v -> {
             String categoryName = editTextCategoryNameAdd.getText().toString();
+
             if (categoryName.isEmpty()) {
                 Toast.makeText(getContext(), "Uzupełnij pole nazwy", Toast.LENGTH_SHORT).show();
             } else {
-                Categories categories = new Categories(-1, categoryName);
+                Categories categories = new Categories(-1, categoryName,signInAccount.getEmail());
                 db.addOne(categories);
                 Toast.makeText(getContext(), "Pomyślnie dodano", Toast.LENGTH_SHORT).show();
                 xxx(categoriesName, view);
@@ -122,6 +128,7 @@ public class CategoriesFragment extends Fragment {
 
         dialogBuilder.setView(popupView);
         dialog = dialogBuilder.create();
+
         dialog.show();
 
         removeButton = popupView.findViewById(R.id.buttonCategoriesPopupRemove);

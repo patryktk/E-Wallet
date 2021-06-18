@@ -16,6 +16,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class EditExpenseActivity extends AppCompatActivity {
     Double value;
     String calendarDate, monthName;
     private int calendarDay, calendarMonth, calendarYear;
+    GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

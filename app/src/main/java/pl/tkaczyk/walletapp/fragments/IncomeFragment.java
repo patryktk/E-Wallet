@@ -26,6 +26,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -234,9 +236,11 @@ public class IncomeFragment extends Fragment {
     private void insertData(String date) {
         Double valueOfIncome = Double.valueOf(valueIncomeEditText.getText().toString());
         String descriptionOfIncome = descriptionEditText.getText().toString();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+
 
         Income income;
-        income = new Income(-1, valueOfIncome, date, descriptionOfIncome, monthName);
+        income = new Income(-1, date, descriptionOfIncome, monthName,valueOfIncome,signInAccount.getEmail());
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
         boolean success = dataBaseHelper.addOne(income);

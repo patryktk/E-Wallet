@@ -32,7 +32,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "wallet.db", null, 5);
+        super(context, "wallet.db", null, 6);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " " + tableDate + " varchar," +
                 " " + tableDescription + " varchar, " +
                 " " + tableMonth + " varchar)";
-        String createTableCategories = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar)";
-        String createTableIncome = "CREATE TABLE " + incomeTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + tableValue + " real , " + tableDate + " varchar, " + tableDescription + " varchar, " + tableMonth + " varchar)";
+        String createTableCategories = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar," + tableUser + "varchar)";
+        String createTableIncome = "CREATE TABLE " + incomeTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + tableValue + " real , " + tableDate + " varchar, " + tableDescription + " varchar, " + tableMonth + " varchar,"+ tableUser + " varchar)";
 
         db.execSQL(createTableExpenses);
         db.execSQL(createTableCategories);

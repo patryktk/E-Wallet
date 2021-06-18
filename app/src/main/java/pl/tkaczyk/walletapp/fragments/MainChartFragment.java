@@ -128,10 +128,11 @@ public class MainChartFragment extends Fragment {
     public void primaryCategories() {
         DataBaseHelper db = new DataBaseHelper(getContext());
         List<String> categoriesList = db.getAllCategories();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         if (categoriesList.isEmpty()) {
-            Categories categories1 = new Categories(-1, "Jedzenie");
-            Categories categories2 = new Categories(-1, "Transport");
-            Categories categories3 = new Categories(-1, "Opłaty");
+            Categories categories1 = new Categories(-1, "Jedzenie",signInAccount.getEmail());
+            Categories categories2 = new Categories(-1, "Transport",signInAccount.getEmail());
+            Categories categories3 = new Categories(-1, "Opłaty",signInAccount.getEmail());
             DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
             dataBaseHelper.addOne(categories1);
             dataBaseHelper.addOne(categories2);

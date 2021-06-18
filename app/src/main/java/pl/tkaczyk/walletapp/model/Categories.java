@@ -2,14 +2,23 @@ package pl.tkaczyk.walletapp.model;
 
 public class Categories {
     int id;
-    String name;
+    String name, userMail;
 
     public Categories() {
     }
 
-    public Categories(int id, String name) {
+    public Categories(int id, String name, String userMail) {
         this.id = id;
         this.name = name;
+        this.userMail = userMail;
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
     }
 
     public int getId() {
