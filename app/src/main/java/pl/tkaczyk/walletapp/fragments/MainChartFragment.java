@@ -89,7 +89,9 @@ public class MainChartFragment extends Fragment {
 
     }
     void setup(String month, String saldo){
-        Cursor cursor = db.getExpensesByMonthChart(month);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+
+        Cursor cursor = db.getExpensesByMonthChart(month,signInAccount.getEmail());
         if(cursor.getCount()>0){
             noData.setVisibility(View.GONE);
             noDataImg.setVisibility(View.GONE);
@@ -114,9 +116,11 @@ public class MainChartFragment extends Fragment {
 
     private void accountBalance() {
         db = new DataBaseHelper(getContext());
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
 
-        Double plus = db.getAllSumOfIncome2();
-        Double minus = db.getAllSumOfExpenses2();
+
+        Double plus = db.getAllSumOfIncome2(signInAccount.getEmail());
+        Double minus = db.getAllSumOfExpenses2(signInAccount.getEmail());
         Double saldo1 = plus - minus;
         saldo = String.format("%.2f", saldo1);
         if (minus > plus) {
@@ -127,8 +131,8 @@ public class MainChartFragment extends Fragment {
 
     public void primaryCategories() {
         DataBaseHelper db = new DataBaseHelper(getContext());
-        List<String> categoriesList = db.getAllCategories();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        List<String> categoriesList = db.getAllCategories(signInAccount.getEmail());
         if (categoriesList.isEmpty()) {
             Categories categories1 = new Categories(-1, "Jedzenie",signInAccount.getEmail());
             Categories categories2 = new Categories(-1, "Transport",signInAccount.getEmail());
@@ -264,8 +268,9 @@ public class MainChartFragment extends Fragment {
 
     public void fillSpinner(View view) {
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         DataBaseHelper db = new DataBaseHelper(getContext());
-        List<String> categoriesList = db.getAllCategories();
+        List<String> categoriesList = db.getAllCategories(signInAccount.getEmail());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, categoriesList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -274,8 +279,10 @@ public class MainChartFragment extends Fragment {
 
     void makeChart(String month) {
         ArrayList<PieEntry> entries = new ArrayList<>();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
 
-        Cursor cursor = db.getExpensesByMonthChart(month);
+
+        Cursor cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail());
         if (cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToNext();

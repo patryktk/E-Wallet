@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
@@ -52,14 +54,15 @@ public class ListOfExpensesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_of_expenses, container, false);
         String currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
 
 
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
-        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth);
+        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth,signInAccount.getEmail());
         textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
         textViewFragmentExpenseListGreen = view.findViewById(R.id.textViewFragmentExpenseListGreen);
-        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth);
+        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth, signInAccount.getEmail());
         textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
         buttonExpenseMonthName.setText(currentMonth);
@@ -78,6 +81,7 @@ public class ListOfExpensesFragment extends Fragment {
     }
 
     public void listOfExpenses(View view, String month) {
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         arrayListExpenseId = new ArrayList<>();
         arrayListExpenseCategory = new ArrayList<>();
         arrayListExpensesValue = new ArrayList<>();
@@ -96,7 +100,7 @@ public class ListOfExpensesFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month) + " zł ");
+        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month, signInAccount.getEmail()) + " zł ");
 
     }
 
@@ -163,7 +167,8 @@ public class ListOfExpensesFragment extends Fragment {
 
 
     private void storeDataInArrays(String month) {
-        Cursor cursor = db.getExpensesByMonth(month);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        Cursor cursor = db.getExpensesByMonth(month, signInAccount.getEmail());
         if (cursor.getCount() == 0) {
             emptyImage.setVisibility(View.VISIBLE);
             noData.setVisibility(View.VISIBLE);
@@ -182,7 +187,8 @@ public class ListOfExpensesFragment extends Fragment {
     }
 
     private void storeIncomeDataInArray(String month) {
-        Cursor cursor = db.getIncomeByMonth(month);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        Cursor cursor = db.getIncomeByMonth(month, signInAccount.getEmail());
         if (cursor.getCount() == 0) {
             Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();
         } else {

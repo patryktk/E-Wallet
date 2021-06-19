@@ -32,7 +32,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "wallet.db", null, 6);
+        super(context, "wallet.db", null, 9);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " " + tableDate + " varchar," +
                 " " + tableDescription + " varchar, " +
                 " " + tableMonth + " varchar)";
-        String createTableCategories = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar," + tableUser + "varchar)";
+        String createTableCategories = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar," + tableUser + " varchar)";
         String createTableIncome = "CREATE TABLE " + incomeTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + tableValue + " real , " + tableDate + " varchar, " + tableDescription + " varchar, " + tableMonth + " varchar,"+ tableUser + " varchar)";
 
         db.execSQL(createTableExpenses);
@@ -88,6 +88,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(categoriesName, categories.getName());
+        cv.put(tableUser, categories.getUserMail());
 
         long insert = db.insert(categoriesTable, null, cv);
 
@@ -106,6 +107,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(tableDate, income.getData());
         cv.put(tableDescription, income.getDescription());
         cv.put(tableMonth, income.getMonth());
+        cv.put(tableUser, income.getUserMail());
 
         long insert = db.insert(incomeTable, null, cv);
 
@@ -153,10 +155,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<String> getAllCategories() {
+    public List<String> getAllCategories(String mail) {
         List<String> categoriesList = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + categoriesTable;
+        String queryString = "SELECT * FROM " + categoriesTable + " WHERE " + tableUser + " = " + "'" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -170,10 +172,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return categoriesList;
     }
 
-    public int getIdCategoriesByName(String name) {
+    public int getIdCategoriesByName(String name, String mail) {
         int id = 0;
-
-        String query = "SELECT ID FROM " + categoriesTable + " WHERE " + categoriesName + "=" + "'" + name + "'";
+        String query = "SELECT ID FROM " + categoriesTable + " WHERE " + categoriesName + "=" + "'" + name + "' and " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
@@ -186,8 +187,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public String getSumOfExpenseByMonth(String month) {
-        String query = "SELECT sum(" + tableValue + ") from " + expensesTable + " where " + tableMonth + "=" + "'" + month + "'";
+    public String getSumOfExpenseByMonth(String month, String mail) {
+        String query = "SELECT sum(" + tableValue + ") from " + expensesTable + " where " + tableMonth + "=" + "'" + month + "' and " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
         String money = "";
@@ -201,8 +202,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return money;
     }
 
-    public Double getSumOfExpenseByMonth2(String month) {
-        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + expensesTable + " where " + tableMonth + "=" + "'" + month + "'";
+    public Double getSumOfExpenseByMonth2(String month, String mail) {
+        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + expensesTable + " where " + tableMonth + "=" + "'" + month + "' and " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
         Double money = 0.0;
@@ -216,8 +217,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return money;
     }
 
-    public Double getSumOfIncomeByMonth2(String month) {
-        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + incomeTable + " where " + tableMonth + "=" + "'" + month + "'";
+    public Double getSumOfIncomeByMonth2(String month, String mail) {
+        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + incomeTable + " where " + tableMonth + "=" + "'" + month + "' and " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
         Double money = 0.0;
@@ -231,8 +232,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return money;
     }
 
-    public Double getAllSumOfIncome2() {
-        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + incomeTable;
+    public Double getAllSumOfIncome2(String mail) {
+        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + incomeTable + " where " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
         Double money = 0.0;
@@ -246,8 +247,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return money;
     }
 
-    public Double getAllSumOfExpenses2() {
-        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + expensesTable;
+    public Double getAllSumOfExpenses2(String mail) {
+        String query = "SELECT ROUND(sum(" + tableValue + "),2) from " + expensesTable + " where " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor1 = null;
         Double money = 0.0;
@@ -262,8 +263,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor getExpensesByMonthChart(String month) {
-        String query = "SELECT sum(" + tableValue + "), " + expensesTableCategoryName + " from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "' group by " + expensesTableCategoryName + "";
+    public Cursor getExpensesByMonthChart(String month, String mail) {
+        String query = "SELECT sum(" + tableValue + "), " + expensesTableCategoryName + " from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "' and " + tableUser + "= '" + mail + "' "  + " group by " + expensesTableCategoryName + "";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -273,8 +274,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getExpensesByMonth(String month) {
-        String query = "SELECT * from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "'";
+    public Cursor getExpensesByMonth(String month, String mail) {
+        String query = "SELECT * from " + expensesTable + " WHERE " + tableMonth + " = " + "'" + month + "' and " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -284,8 +285,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getIncomeByMonth(String month) {
-        String query = "SELECT * from " + incomeTable + " WHERE " + tableMonth + " = " + "'" + month + "'";
+    public Cursor getIncomeByMonth(String month, String mail) {
+        String query = "SELECT * from " + incomeTable + " WHERE " + tableMonth + " = " + "'" + month + "' and " + tableUser + "= '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -295,8 +296,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getCategories() {
-        String query = "SELECT * FROM " + categoriesTable;
+    public Cursor getCategories(String mail) {
+        String query = "SELECT * FROM " + categoriesTable + " where " + tableUser + " = '" + mail + "'";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;

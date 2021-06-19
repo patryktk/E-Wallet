@@ -38,7 +38,6 @@ public class CategoriesFragment extends Fragment {
     EditText editTextCategoryNameAdd, editTextCategoryNameRemove;
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
-    GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
 
     @Nullable
     @Override
@@ -83,7 +82,8 @@ public class CategoriesFragment extends Fragment {
     }
 
     void storeDataInArray() {
-        Cursor cursor = db.getCategories();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        Cursor cursor = db.getCategories(signInAccount.getEmail());
         if (cursor.getCount() == 0) {
             Toast.makeText(getContext(), "No data", Toast.LENGTH_SHORT).show();
         } else {

@@ -79,8 +79,9 @@ public class IncomeFragment extends Fragment {
 
     private void accountBalance() {
         db = new DataBaseHelper(getContext());
-        Double plus = db.getAllSumOfIncome2();
-        Double minus = db.getAllSumOfExpenses2();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        Double plus = db.getAllSumOfIncome2(signInAccount.getEmail());
+        Double minus = db.getAllSumOfExpenses2(signInAccount.getEmail());
         Double saldo1 = plus - minus;
 
         saldo = String.format("%.2f", saldo1);
@@ -92,9 +93,11 @@ public class IncomeFragment extends Fragment {
 
     private void makeChart(String month) {
         ArrayList<PieEntry> entries = new ArrayList<>();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
 
-        Double sumOfExpense = db.getSumOfExpenseByMonth2(month);
-        Double sumOfIncome = db.getSumOfIncomeByMonth2(month);
+
+        Double sumOfExpense = db.getSumOfExpenseByMonth2(month,signInAccount.getEmail());
+        Double sumOfIncome = db.getSumOfIncomeByMonth2(month, signInAccount.getEmail());
         if(sumOfExpense == 0 || sumOfIncome  == 0){
             entries.add(new PieEntry(1, ""));
         }else{

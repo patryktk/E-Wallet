@@ -34,7 +34,6 @@ public class EditExpenseActivity extends AppCompatActivity {
     Double value;
     String calendarDate, monthName;
     private int calendarDay, calendarMonth, calendarYear;
-    GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
 
 
     @Override
@@ -158,6 +157,7 @@ public class EditExpenseActivity extends AppCompatActivity {
 
     void getAndSetIntentData() {
         db = new DataBaseHelper(this);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if (getIntent().hasExtra("Id") && getIntent().hasExtra("Value") && getIntent().hasExtra("Category") && getIntent().hasExtra("Date") && getIntent().hasExtra("Description") && getIntent().hasExtra("Month")) {
             id = getIntent().getStringExtra("Id");
             value = Double.valueOf(getIntent().getStringExtra("Value"));
@@ -169,7 +169,7 @@ public class EditExpenseActivity extends AppCompatActivity {
             editTextValue.setText(value.toString());
             editTextDescription.setText(description);
             tvDate.setText(date);
-            int categoryId = db.getIdCategoriesByName(category) - 1;
+            int categoryId = db.getIdCategoriesByName(category, signInAccount.getEmail()) - 1;
             spinner.setSelection(categoryId);
 
         } else {
@@ -179,7 +179,8 @@ public class EditExpenseActivity extends AppCompatActivity {
 
     void fillSpinner() {
         DataBaseHelper db = new DataBaseHelper(this);
-        List<String> categoriesList = db.getAllCategories();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        List<String> categoriesList = db.getAllCategories(signInAccount.getEmail());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, categoriesList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
