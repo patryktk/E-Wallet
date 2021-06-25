@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".fragments.BudgetFragment">
 
+    <Button
+        android:id="@+id/buttonBudgetYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:text="Year" />
+
     <TextView
         android:id="@+id/textViewBudgetIncomeName"
         android:layout_width="wrap_content"
@@ -22,7 +29,8 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="404dp" />
+        android:layout_height="353dp"
+        android:layout_marginTop="50dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBudget"

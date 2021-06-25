@@ -29,6 +29,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String tableDate = "DATE";
     public static final String tableDescription = "DESCRIPTION";
     public static final String tableMonth = "MONTH";
+    public static final String tableYear = "YEAR";
 
 
     public DataBaseHelper(@Nullable Context context) {
@@ -43,9 +44,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " " + tableUser + " varchar," +
                 " " + tableDate + " varchar," +
                 " " + tableDescription + " varchar, " +
-                " " + tableMonth + " varchar)";
+                " " + tableMonth + " varchar," +
+                " " + tableYear + " varchar)";
         String createTableCategories = "CREATE TABLE " + categoriesTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + categoriesName + " varchar," + tableUser + "varchar)";
-        String createTableIncome = "CREATE TABLE " + incomeTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + tableValue + " real , " + tableDate + " varchar, " + tableDescription + " varchar, " + tableMonth + " varchar,"+ tableUser + " varchar)";
+        String createTableIncome = "CREATE TABLE " + incomeTable + " (ID INTEGER primary KEY AUTOINCREMENT, " + tableValue + " real , " + tableDate + " varchar, " + tableDescription + " varchar, " + tableMonth + " varchar, " + tableYear + " varchar,"+ tableUser + " varchar)";
 
         db.execSQL(createTableExpenses);
         db.execSQL(createTableCategories);
