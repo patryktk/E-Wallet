@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -28,8 +29,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +47,7 @@ public class BudgetFragment extends Fragment {
     TextView incomeValue;
     AdapterBudget mAdapterBudget;
     RecyclerView mRecyclerView;
+    Button yearButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,10 +57,21 @@ public class BudgetFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
 
         mBarChart = (BarChart) view.findViewById(R.id.barChart);
         incomeValue = (TextView) view.findViewById(R.id.textViewBudgetIncomeValue);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewBudget);
+
+        yearButton = (Button) view.findViewById(R.id.buttonBudgetYear);
+        yearButton.setText(String.valueOf(currentYear));
+        yearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickYear(view);
+            }
+        });
         setupBarChart();
         setDataInChart();
         mBarChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
@@ -68,8 +80,6 @@ public class BudgetFragment extends Fragment {
                 //index of selected bar
                 int x = mBarChart.getBarData().getDataSetForEntry(e).getEntryIndex((BarEntry)e);
                 listOfExpenses(x, view);
-
-
             }
 
             @Override
@@ -81,11 +91,23 @@ public class BudgetFragment extends Fragment {
         return view;
     }
 
+    private void pickYear(View view) {
+        final Calendar today = Calendar.getInstance();
+        int miesiac = today.get(Calendar.MONTH) + 1;
+        int rok = today.get(Calendar.YEAR);
+        MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(view.getContext(),
+                (selectedMonth, selectedYear) -> {
+                    yearButton.setText(String.valueOf(selectedYear));
+                }, rok, miesiac);
+        builder.setActivatedYear(rok)
+                .setTitle("Select year")
+                .showYearOnly()
+                .build().show();
+    }
+
     private void listOfExpenses(int x, View view) {
         String monthOfBar = pickMonth(x + 1);
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-
-        incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar,signInAccount.getEmail()).toString() + " zł");
+        incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar).toString() + " zł");
 
         arrayListBudgetCategory = new ArrayList<>();
         arrayListBudgetValue = new ArrayList<>();
@@ -98,9 +120,7 @@ public class BudgetFragment extends Fragment {
     }
 
     private void storeDataInArray(String month) {
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-
-        Cursor cursor = db.getExpensesByMonthChart(month,signInAccount.getEmail());
+        Cursor cursor = db.getExpensesByMonthChart(month);
         while (cursor.moveToNext()){
             arrayListBudgetValue.add(cursor.getString(0) + " zł");
             arrayListBudgetCategory.add(cursor.getString(1) + " zł");
@@ -111,11 +131,10 @@ public class BudgetFragment extends Fragment {
     private void setDataInChart() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         db = new DataBaseHelper(getContext());
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         Float currentMonth = Calendar.getInstance().get(Calendar.MONTH) +1f;
 
         for (int i = 1; i < 12; i++) {
-            double d =  db.getSumOfIncomeByMonth2(pickMonth(i),signInAccount.getEmail());
+            double d =  db.getSumOfIncomeByMonth2(pickMonth(i));
             float f = (float) d;
             barEntries.add(new BarEntry(i, f));
         }
@@ -127,7 +146,7 @@ public class BudgetFragment extends Fragment {
 
         ArrayList<BarEntry> barEntries1 = new ArrayList<>();
         for (int i = 1; i < 12; i++) {
-            double d =  db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail());
+            double d =  db.getSumOfExpenseByMonth2(pickMonth(i));
             float f = (float) d;
             barEntries1.add(new BarEntry(i, f));
         }
@@ -184,9 +203,8 @@ public class BudgetFragment extends Fragment {
     public String moneyBallance(String month){
         String saldo;
         db = new DataBaseHelper(getContext());
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-        double wydatki = db.getSumOfExpenseByMonth2(month,signInAccount.getEmail());
-        double przychód =  db.getSumOfIncomeByMonth2(month, signInAccount.getEmail());
+        double wydatki = db.getSumOfExpenseByMonth2(month);
+        double przychód =  db.getSumOfIncomeByMonth2(month);
         double różnica = przychód  - wydatki;
 
         saldo = String.format("%.2f", różnica);
