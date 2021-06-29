@@ -30,7 +30,6 @@ public class ListOfExpensesFragment extends Fragment {
     RecyclerView mRecyclerView;
     DataBaseHelper db;
     ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseId, arrayListExpenseDescription, arrayListExpenseMonth;
-    ArrayList<String> arrayListIncomeValue, arrayListIncomeDate, arrayListIncomeCategory;
     AdapterRVExpenses mAdapterRVExpenses;
     Button buttonExpenseMonthName;
     String monthName, chooseYear = "";
@@ -91,11 +90,6 @@ public class ListOfExpensesFragment extends Fragment {
         arrayListExpenseDescription = new ArrayList<>();
         arrayListExpenseMonth = new ArrayList<>();
         storeDataInArrays(month);
-
-        arrayListIncomeCategory = new ArrayList<>();
-        arrayListIncomeDate = new ArrayList<>();
-        arrayListIncomeValue = new ArrayList<>();
-        storeIncomeDataInArray(month);
 
 
         mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpenseId, arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseDescription, arrayListExpenseMonth);
@@ -186,47 +180,40 @@ public class ListOfExpensesFragment extends Fragment {
     private void storeDataInArrays(String month) {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        Cursor cursor;
+        Cursor cursorIncome;
+        Cursor cursorExpense;
         if(chooseYear == ""){
-            cursor = db.getExpensesByMonth(month, signInAccount.getEmail(), currentYear);
+            cursorExpense = db.getExpensesByMonth(month, signInAccount.getEmail(), currentYear);
+            cursorIncome = db.getIncomeByMonth(month, signInAccount.getEmail(),currentYear);
         }else{
-            cursor = db.getExpensesByMonth(month, signInAccount.getEmail(), chooseYear);
+            cursorExpense = db.getExpensesByMonth(month, signInAccount.getEmail(), chooseYear);
+            cursorIncome = db.getIncomeByMonth(month,signInAccount.getEmail(), chooseYear);
         }
-        if (cursor.getCount() == 0) {
+        if (cursorExpense.getCount() == 0 && cursorIncome.getCount() == 0) {
             emptyImage.setVisibility(View.VISIBLE);
             noData.setVisibility(View.VISIBLE);
         } else {
-            while (cursor.moveToNext()) {
-                arrayListExpenseId.add(cursor.getString(0));
-                arrayListExpensesValue.add(cursor.getString(1));
-                arrayListExpenseCategory.add(cursor.getString(2));
-                arrayListExpenseDate.add(cursor.getString(4));
-                arrayListExpenseDescription.add(cursor.getString(5));
-                arrayListExpenseMonth.add(cursor.getString(6));
+            while (cursorExpense.moveToNext()) {
+                arrayListExpenseId.add(cursorExpense.getString(0));
+                arrayListExpensesValue.add(cursorExpense.getString(1));
+                arrayListExpenseCategory.add(cursorExpense.getString(2));
+                arrayListExpenseDate.add(cursorExpense.getString(4));
+                arrayListExpenseDescription.add(cursorExpense.getString(5));
+                arrayListExpenseMonth.add(cursorExpense.getString(6));
+            }
+            while (cursorIncome.moveToNext()){
+                arrayListExpenseId.add(cursorIncome.getString(0));
+                arrayListExpensesValue.add(cursorIncome.getString(1));
+                arrayListExpenseCategory.add("Przychód");
+                arrayListExpenseDate.add(cursorIncome.getString(2));
+                arrayListExpenseDescription.add(cursorIncome.getString(3));
+                arrayListExpenseMonth.add(cursorIncome.getString(4));
             }
             emptyImage.setVisibility(View.GONE);
             noData.setVisibility(View.GONE);
         }
     }
 
-    private void storeIncomeDataInArray(String month) {
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-        Cursor cursor;
-        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        if(chooseYear == ""){
-            cursor = db.getIncomeByMonth(month, signInAccount.getEmail(), currentYear);
-        }else{
-            cursor = db.getIncomeByMonth(month, signInAccount.getEmail(), chooseYear);
-        }
-        if (cursor.getCount() == 0) {
-            Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                arrayListIncomeValue.add("+ " + cursor.getString(1) + " zł");
-                arrayListIncomeDate.add(cursor.getString(2));
-                arrayListIncomeCategory.add("Przychód");
-            }
-        }
-    }
+
 
 }

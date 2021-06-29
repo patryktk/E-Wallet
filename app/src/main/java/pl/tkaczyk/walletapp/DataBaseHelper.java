@@ -84,6 +84,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+    public boolean deleteOneIncome(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(incomeTable, "id=?", new String[]{id});
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public boolean addOne(Categories categories) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -157,6 +166,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (result == -1) {
 
         }
+
+    }
+    void updateIncome(String row_id, Double value, String date, String description, String month) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(tableValue, value);
+        cv.put(tableDate, date);
+        cv.put(tableDescription, description);
+        cv.put(tableMonth, month);
+
+        long result = db.update(incomeTable, cv, "ID=?", new String[]{row_id});
+        if (result == -1) {
+
+        }
+
     }
 
     public List<String> getAllCategories(String mail) {

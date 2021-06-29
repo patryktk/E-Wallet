@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import pl.tkaczyk.walletapp.EditExpenseActivity;
+import pl.tkaczyk.walletapp.EditIncomeActivity;
 import pl.tkaczyk.walletapp.R;
 
 public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.ViewHolder> {
@@ -54,14 +55,24 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
         viewHolder.expenseRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, EditExpenseActivity.class);
-                intent.putExtra("Id", String.valueOf(arrayExpenseId.get(position)));
-                intent.putExtra("Value", String.valueOf(arrayExpenseValue.get(position)));
-                intent.putExtra("Category", String.valueOf(arrayExpenseCategory.get(position)));
-                intent.putExtra("Date", String.valueOf(arrayExpenseDate.get(position)));
-                intent.putExtra("Description", String.valueOf(arrayExpenseDescription.get(position)));
-                intent.putExtra("Month", String.valueOf(arrayExpenseMonth.get(position)));
-                mContext.startActivity(intent);
+                if(arrayExpenseCategory.get(position) == "Przychód"){
+                    Intent intent = new Intent(mContext, EditIncomeActivity.class);
+                    intent.putExtra("Id", String.valueOf(arrayExpenseId.get(position)));
+                    intent.putExtra("Value", String.valueOf(arrayExpenseValue.get(position)));
+                    intent.putExtra("Date", String.valueOf(arrayExpenseDate.get(position)));
+                    intent.putExtra("Description", String.valueOf(arrayExpenseDescription.get(position)));
+                    intent.putExtra("Month", String.valueOf(arrayExpenseMonth.get(position)));
+                    mContext.startActivity(intent);
+                }else{
+                    Intent intent = new Intent(mContext, EditExpenseActivity.class);
+                    intent.putExtra("Id", String.valueOf(arrayExpenseId.get(position)));
+                    intent.putExtra("Value", String.valueOf(arrayExpenseValue.get(position)));
+                    intent.putExtra("Category", String.valueOf(arrayExpenseCategory.get(position)));
+                    intent.putExtra("Date", String.valueOf(arrayExpenseDate.get(position)));
+                    intent.putExtra("Description", String.valueOf(arrayExpenseDescription.get(position)));
+                    intent.putExtra("Month", String.valueOf(arrayExpenseMonth.get(position)));
+                    mContext.startActivity(intent);
+                }
             }
         });
 
