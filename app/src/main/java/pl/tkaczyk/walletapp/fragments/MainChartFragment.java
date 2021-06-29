@@ -54,7 +54,7 @@ public class MainChartFragment extends Fragment {
     private EditText valueExpenseEditText, descriptionEditText;
     private Spinner spinner;
     private int day, month, year;
-    private String date, monthName;
+    private String date, monthName, chooseYear = "";
     private TextView tvDate, noData;
     private PieChart mPieChart;
     ImageView noDataImg;
@@ -91,7 +91,9 @@ public class MainChartFragment extends Fragment {
     void setup(String month, String saldo){
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
 
-        Cursor cursor = db.getExpensesByMonthChart(month,signInAccount.getEmail());
+        Cursor cursor;
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        cursor = db.getExpensesByMonthChart(month,signInAccount.getEmail(), currentYear);
         if(cursor.getCount()>0){
             noData.setVisibility(View.GONE);
             noDataImg.setVisibility(View.GONE);
@@ -117,7 +119,6 @@ public class MainChartFragment extends Fragment {
     private void accountBalance() {
         db = new DataBaseHelper(getContext());
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-
 
         Double plus = db.getAllSumOfIncome2(signInAccount.getEmail());
         Double minus = db.getAllSumOfExpenses2(signInAccount.getEmail());
@@ -252,9 +253,10 @@ public class MainChartFragment extends Fragment {
         String categoryOfExpense = spinner.getSelectedItem().toString();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String descriptionOfExpense = descriptionEditText.getText().toString();
+        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
         Expenses expenses;
-        expenses = new Expenses(-1, valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense, monthName);
+        expenses = new Expenses(-1,valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense, monthName, year);
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
         boolean success = dataBaseHelper.addOne(expenses);
@@ -280,9 +282,10 @@ public class MainChartFragment extends Fragment {
     void makeChart(String month) {
         ArrayList<PieEntry> entries = new ArrayList<>();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
 
-        Cursor cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail());
+        Cursor cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail(), currentYear);
         if (cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToNext();

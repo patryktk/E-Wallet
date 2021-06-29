@@ -29,6 +29,8 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
@@ -41,13 +43,14 @@ import pl.tkaczyk.walletapp.adapter.AdapterBudget;
 
 public class BudgetFragment extends Fragment {
     BarChart mBarChart;
-    String monthName;
+    String monthName, chooseYear = "";
     DataBaseHelper db;
     ArrayList<String> arrayListBudgetCategory, arrayListBudgetValue;
     TextView incomeValue;
     AdapterBudget mAdapterBudget;
     RecyclerView mRecyclerView;
     Button yearButton;
+    int barPosition =0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,8 +81,8 @@ public class BudgetFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 //index of selected bar
-                int x = mBarChart.getBarData().getDataSetForEntry(e).getEntryIndex((BarEntry)e);
-                listOfExpenses(x, view);
+                barPosition = mBarChart.getBarData().getDataSetForEntry(e).getEntryIndex((BarEntry)e);
+                listOfExpenses(barPosition, view);
             }
 
             @Override
@@ -97,6 +100,8 @@ public class BudgetFragment extends Fragment {
         int rok = today.get(Calendar.YEAR);
         MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(view.getContext(),
                 (selectedMonth, selectedYear) -> {
+                    listOfExpenses(barPosition, view);
+                    chooseYear = String.valueOf(selectedYear);
                     yearButton.setText(String.valueOf(selectedYear));
                 }, rok, miesiac);
         builder.setActivatedYear(rok)
@@ -107,7 +112,14 @@ public class BudgetFragment extends Fragment {
 
     private void listOfExpenses(int x, View view) {
         String monthOfBar = pickMonth(x + 1);
-        incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar).toString() + " zł");
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        if(chooseYear == ""){
+            incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar, signInAccount.getEmail(), currentYear).toString() + " zł");
+        }
+        else{
+            incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar, signInAccount.getEmail(), chooseYear).toString() + " zł");
+        }
 
         arrayListBudgetCategory = new ArrayList<>();
         arrayListBudgetValue = new ArrayList<>();
@@ -120,7 +132,15 @@ public class BudgetFragment extends Fragment {
     }
 
     private void storeDataInArray(String month) {
-        Cursor cursor = db.getExpensesByMonthChart(month);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        Cursor cursor;
+        if(chooseYear == ""){
+            cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail(), currentYear);
+        }else {
+            cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail(), chooseYear);
+
+        }
         while (cursor.moveToNext()){
             arrayListBudgetValue.add(cursor.getString(0) + " zł");
             arrayListBudgetCategory.add(cursor.getString(1) + " zł");
@@ -130,11 +150,19 @@ public class BudgetFragment extends Fragment {
 
     private void setDataInChart() {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
         Float currentMonth = Calendar.getInstance().get(Calendar.MONTH) +1f;
 
+        double d;
         for (int i = 1; i < 12; i++) {
-            double d =  db.getSumOfIncomeByMonth2(pickMonth(i));
+            if(chooseYear == ""){
+                d =  db.getSumOfIncomeByMonth2(pickMonth(i), signInAccount.getEmail(), currentYear);
+            }
+            else{
+                d =  db.getSumOfIncomeByMonth2(pickMonth(i), signInAccount.getEmail(), chooseYear);
+            }
             float f = (float) d;
             barEntries.add(new BarEntry(i, f));
         }
@@ -145,9 +173,15 @@ public class BudgetFragment extends Fragment {
 
 
         ArrayList<BarEntry> barEntries1 = new ArrayList<>();
+        double x;
         for (int i = 1; i < 12; i++) {
-            double d =  db.getSumOfExpenseByMonth2(pickMonth(i));
-            float f = (float) d;
+            if(chooseYear == ""){
+                x =  db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail(),currentYear);
+            }else{
+                x =  db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail(), chooseYear);
+            }
+
+            float f = (float) x;
             barEntries1.add(new BarEntry(i, f));
         }
 
@@ -202,9 +236,21 @@ public class BudgetFragment extends Fragment {
     }
     public String moneyBallance(String month){
         String saldo;
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
-        double wydatki = db.getSumOfExpenseByMonth2(month);
-        double przychód =  db.getSumOfIncomeByMonth2(month);
+        double wydatki;
+        if(chooseYear == ""){
+             wydatki = db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), currentYear);
+        }else {
+            wydatki = db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), chooseYear);
+        }
+        double przychód;
+        if(chooseYear == ""){
+            przychód =  db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), currentYear);
+        }else {
+            przychód =  db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), chooseYear);
+        }
         double różnica = przychód  - wydatki;
 
         saldo = String.format("%.2f", różnica);
@@ -274,7 +320,5 @@ public class BudgetFragment extends Fragment {
         }
         return monthName;
     }
-
-
 
 }

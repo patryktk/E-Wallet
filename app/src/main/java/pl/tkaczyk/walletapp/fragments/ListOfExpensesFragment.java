@@ -33,7 +33,7 @@ public class ListOfExpensesFragment extends Fragment {
     ArrayList<String> arrayListIncomeValue, arrayListIncomeDate, arrayListIncomeCategory;
     AdapterRVExpenses mAdapterRVExpenses;
     Button buttonExpenseMonthName;
-    String monthName;
+    String monthName, chooseYear = "";
     TextView textViewFragmentExpenseListRed, textViewFragmentExpenseListGreen, noData;
     ImageView emptyImage;
 
@@ -54,18 +54,20 @@ public class ListOfExpensesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_of_expenses, container, false);
         String currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
 
 
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
-        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth,signInAccount.getEmail());
+        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth,signInAccount.getEmail(), currentYear);
+
         textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
         textViewFragmentExpenseListGreen = view.findViewById(R.id.textViewFragmentExpenseListGreen);
-        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth, signInAccount.getEmail());
+        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth, signInAccount.getEmail(), currentYear);
         textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
-        buttonExpenseMonthName.setText(currentMonth);
+        buttonExpenseMonthName.setText(currentMonth + " " + currentYear);
         mRecyclerView = view.findViewById(R.id.recyclerViewExpenses);
         emptyImage = view.findViewById(R.id.empty_imageview);
         noData = view.findViewById(R.id.noData);
@@ -100,23 +102,38 @@ public class ListOfExpensesFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month, signInAccount.getEmail()) + " zł ");
+
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        if(chooseYear == ""){
+            textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month, signInAccount.getEmail(), currentYear) + " zł ");
+        }else{
+            textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month, signInAccount.getEmail(), chooseYear) + " zł ");
+        }
+
 
     }
 
 
     public void btnMonth(View view) {
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         final Calendar today = Calendar.getInstance();
         int miesiac = today.get(Calendar.MONTH) + 1;
         int rok = today.get(Calendar.YEAR);
         MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(view.getContext(),
                 (selectedMonth, selectedYear) -> {
-                    buttonExpenseMonthName.setText(pickMonth(selectedMonth + 1));
+                    buttonExpenseMonthName.setText(pickMonth(selectedMonth + 1) + " " + selectedYear);
+
+                    chooseYear = String.valueOf(selectedYear);
+                    double sumOfExpense = db.getSumOfExpenseByMonth2(pickMonth(selectedMonth + 1),signInAccount.getEmail(), String.valueOf(selectedYear));
+                    textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
+
+                    double sumOfIncome = db.getSumOfIncomeByMonth2(pickMonth(selectedMonth + 1), signInAccount.getEmail(), String.valueOf(selectedYear));
+                    textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
+
                     listOfExpenses(view, pickMonth(selectedMonth + 1));
                 }, rok, miesiac);
         builder.setActivatedMonth(miesiac - 1)
-                .setTitle("Select month")
-                .showMonthOnly()
+                .setTitle("Select month and year")
                 .build().show();
 
     }
@@ -168,7 +185,13 @@ public class ListOfExpensesFragment extends Fragment {
 
     private void storeDataInArrays(String month) {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-        Cursor cursor = db.getExpensesByMonth(month, signInAccount.getEmail());
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        Cursor cursor;
+        if(chooseYear == ""){
+            cursor = db.getExpensesByMonth(month, signInAccount.getEmail(), currentYear);
+        }else{
+            cursor = db.getExpensesByMonth(month, signInAccount.getEmail(), chooseYear);
+        }
         if (cursor.getCount() == 0) {
             emptyImage.setVisibility(View.VISIBLE);
             noData.setVisibility(View.VISIBLE);
@@ -188,7 +211,13 @@ public class ListOfExpensesFragment extends Fragment {
 
     private void storeIncomeDataInArray(String month) {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-        Cursor cursor = db.getIncomeByMonth(month, signInAccount.getEmail());
+        Cursor cursor;
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        if(chooseYear == ""){
+            cursor = db.getIncomeByMonth(month, signInAccount.getEmail(), currentYear);
+        }else{
+            cursor = db.getIncomeByMonth(month, signInAccount.getEmail(), chooseYear);
+        }
         if (cursor.getCount() == 0) {
             Toast.makeText(getContext(), "NO DATA!", Toast.LENGTH_SHORT).show();
         } else {

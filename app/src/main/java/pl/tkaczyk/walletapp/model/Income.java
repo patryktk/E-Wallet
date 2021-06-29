@@ -2,19 +2,29 @@ package pl.tkaczyk.walletapp.model;
 
 public class Income {
     int id;
-    String data, description, month, userMail;
     Double value;
+    String data, description, month, userMail, year;
+
 
     public Income() {
     }
 
-    public Income(int id, String data, String description, String month, Double value,String userMail) {
+    public Income(int id, Double value, String data, String description, String month, String userMail, String year) {
         this.id = id;
+        this.value = value;
         this.data = data;
         this.description = description;
         this.month = month;
-        this.value = value;
         this.userMail = userMail;
+        this.year = year;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getUserMail() {

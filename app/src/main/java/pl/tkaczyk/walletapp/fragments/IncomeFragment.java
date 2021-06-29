@@ -94,10 +94,10 @@ public class IncomeFragment extends Fragment {
     private void makeChart(String month) {
         ArrayList<PieEntry> entries = new ArrayList<>();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
-
-        Double sumOfExpense = db.getSumOfExpenseByMonth2(month,signInAccount.getEmail());
-        Double sumOfIncome = db.getSumOfIncomeByMonth2(month, signInAccount.getEmail());
+        Double sumOfExpense = db.getSumOfExpenseByMonth2(month,signInAccount.getEmail(), currentYear);
+        Double sumOfIncome = db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), currentYear);
         if(sumOfExpense == 0 || sumOfIncome  == 0){
             entries.add(new PieEntry(1, ""));
         }else{
@@ -240,10 +240,12 @@ public class IncomeFragment extends Fragment {
         Double valueOfIncome = Double.valueOf(valueIncomeEditText.getText().toString());
         String descriptionOfIncome = descriptionEditText.getText().toString();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+
 
 
         Income income;
-        income = new Income(-1, date, descriptionOfIncome, monthName,valueOfIncome,signInAccount.getEmail());
+        income = new Income(-1, valueOfIncome,date, descriptionOfIncome, monthName,signInAccount.getEmail(),year);
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
         boolean success = dataBaseHelper.addOne(income);
