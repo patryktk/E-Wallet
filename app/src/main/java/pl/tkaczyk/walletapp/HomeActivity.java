@@ -1,6 +1,11 @@
 package pl.tkaczyk.walletapp;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -65,6 +70,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainChartFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+        notifier();
+    }
+
+    private void notifier() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("My notification", "My Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(HomeActivity.this, ReminderBroadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        long timeAtClick = System.currentTimeMillis();
+        long tenSeconds = 3600000;
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtClick + tenSeconds, pendingIntent);
+
+
     }
 
     @Override

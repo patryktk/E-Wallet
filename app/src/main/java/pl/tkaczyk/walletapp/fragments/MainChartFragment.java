@@ -1,10 +1,18 @@
 package pl.tkaczyk.walletapp.fragments;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -22,6 +30,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -41,6 +51,7 @@ import java.util.List;
 import pl.tkaczyk.walletapp.DataBaseHelper;
 import pl.tkaczyk.walletapp.DecimalDigitalFilter;
 import pl.tkaczyk.walletapp.R;
+import pl.tkaczyk.walletapp.ReminderBroadcast;
 import pl.tkaczyk.walletapp.model.Categories;
 import pl.tkaczyk.walletapp.model.Expenses;
 
@@ -85,6 +96,7 @@ public class MainChartFragment extends Fragment {
         Button buttonSwitch = getView().findViewById(R.id.buttonMainFragmentSwitchEI);
         buttonSwitch.setOnClickListener(v -> {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new IncomeFragment()).commit();
+
         });
 
     }
@@ -328,4 +340,5 @@ public class MainChartFragment extends Fragment {
         Legend l = mPieChart.getLegend();
         l.setEnabled(false);
     }
+
 }
