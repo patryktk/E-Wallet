@@ -5,26 +5,37 @@
     android:layout_height="match_parent"
     tools:context=".fragments.BudgetFragment">
 
-    <Button
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonBudgetYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
+        android:background="@drawable/custom_add_expense_button"
         android:text="Year" />
 
     <TextView
         android:id="@+id/textViewBudgetIncomeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="423dp"
         android:text="Przychód"
-        android:layout_marginTop="423dp"/>
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/textViewBudgetIncomeValue"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="178dp"
+        android:layout_marginTop="423dp"
+        android:layout_marginEnd="32dp"
+        android:layout_toEndOf="@+id/textViewBudgetIncomeName"
         android:text="2000zł"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="423dp"/>
+        android:textSize="18sp"
+        android:gravity="center"/>
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +50,7 @@ public class BudgetFragment extends Fragment {
     TextView incomeValue;
     AdapterBudget mAdapterBudget;
     RecyclerView mRecyclerView;
-    Button yearButton;
+    AppCompatButton yearButton;
     int barPosition =0;
 
     @Override
@@ -67,7 +68,7 @@ public class BudgetFragment extends Fragment {
         incomeValue = (TextView) view.findViewById(R.id.textViewBudgetIncomeValue);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewBudget);
 
-        yearButton = (Button) view.findViewById(R.id.buttonBudgetYear);
+        yearButton = (AppCompatButton) view.findViewById(R.id.buttonBudgetYear);
         yearButton.setText(String.valueOf(currentYear));
         yearButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +144,7 @@ public class BudgetFragment extends Fragment {
         }
         while (cursor.moveToNext()){
             arrayListBudgetValue.add(cursor.getString(0) + " zł");
-            arrayListBudgetCategory.add(cursor.getString(1) + " zł");
+            arrayListBudgetCategory.add(cursor.getString(1));
         }
 
     }

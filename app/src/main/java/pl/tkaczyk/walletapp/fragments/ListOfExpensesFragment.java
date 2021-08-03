@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -31,7 +32,7 @@ public class ListOfExpensesFragment extends Fragment {
     DataBaseHelper db;
     ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseId, arrayListExpenseDescription, arrayListExpenseMonth;
     AdapterRVExpenses mAdapterRVExpenses;
-    Button buttonExpenseMonthName;
+    AppCompatButton buttonExpenseMonthName;
     String monthName, chooseYear = "";
     TextView textViewFragmentExpenseListRed, textViewFragmentExpenseListGreen, noData;
     ImageView emptyImage;
@@ -57,20 +58,29 @@ public class ListOfExpensesFragment extends Fragment {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
 
+        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth, signInAccount.getEmail(), currentYear);
+        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth, signInAccount.getEmail(), currentYear);
 
         textViewFragmentExpenseListRed = view.findViewById(R.id.textViewFragmentExpenseListRed);
-        double sumOfExpense = db.getSumOfExpenseByMonth2(currentMonth,signInAccount.getEmail(), currentYear);
-
-        textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
         textViewFragmentExpenseListGreen = view.findViewById(R.id.textViewFragmentExpenseListGreen);
-        double sumOfIncome = db.getSumOfIncomeByMonth2(currentMonth, signInAccount.getEmail(), currentYear);
-        textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
+
+        if (sumOfExpense == 0.0) {
+            textViewFragmentExpenseListRed.setVisibility(View.GONE);
+        } else {
+            textViewFragmentExpenseListRed.setVisibility(View.VISIBLE);
+            textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
+        }
+        if (sumOfIncome == 0.0) {
+            textViewFragmentExpenseListGreen.setVisibility(View.GONE);
+        } else {
+            textViewFragmentExpenseListGreen.setVisibility(View.VISIBLE);
+            textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
+        }
         buttonExpenseMonthName = view.findViewById(R.id.buttonExpenseMonth);
         buttonExpenseMonthName.setText(currentMonth + " " + currentYear);
         mRecyclerView = view.findViewById(R.id.recyclerViewExpenses);
         emptyImage = view.findViewById(R.id.empty_imageview);
         noData = view.findViewById(R.id.noData);
-
 
         buttonExpenseMonthName.setOnClickListener(v -> {
             btnMonth(view);
@@ -98,13 +108,11 @@ public class ListOfExpensesFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        if(chooseYear == ""){
-            textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month, signInAccount.getEmail(), currentYear) + " zł ");
-        }else{
-            textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth(month, signInAccount.getEmail(), chooseYear) + " zł ");
+        if (chooseYear == "") {
+            textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), currentYear) + " zł ");
+        } else {
+            textViewFragmentExpenseListRed.setText(" - " + db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), chooseYear) + " zł ");
         }
-
-
     }
 
 
@@ -118,11 +126,20 @@ public class ListOfExpensesFragment extends Fragment {
                     buttonExpenseMonthName.setText(pickMonth(selectedMonth + 1) + " " + selectedYear);
 
                     chooseYear = String.valueOf(selectedYear);
-                    double sumOfExpense = db.getSumOfExpenseByMonth2(pickMonth(selectedMonth + 1),signInAccount.getEmail(), String.valueOf(selectedYear));
-                    textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
-
+                    double sumOfExpense = db.getSumOfExpenseByMonth2(pickMonth(selectedMonth + 1), signInAccount.getEmail(), String.valueOf(selectedYear));
+                    if (sumOfExpense == 0.0) {
+                        textViewFragmentExpenseListRed.setVisibility(View.GONE);
+                    } else {
+                        textViewFragmentExpenseListRed.setVisibility(View.VISIBLE);
+                        textViewFragmentExpenseListRed.setText(" - " + sumOfExpense + " zł ");
+                    }
                     double sumOfIncome = db.getSumOfIncomeByMonth2(pickMonth(selectedMonth + 1), signInAccount.getEmail(), String.valueOf(selectedYear));
-                    textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
+                    if (sumOfIncome == 0.0) {
+                        textViewFragmentExpenseListGreen.setVisibility(View.GONE);
+                    } else {
+                        textViewFragmentExpenseListGreen.setVisibility(View.VISIBLE);
+                        textViewFragmentExpenseListGreen.setText(" + " + sumOfIncome + " zł ");
+                    }
 
                     listOfExpenses(view, pickMonth(selectedMonth + 1));
                 }, rok, miesiac);
@@ -182,12 +199,12 @@ public class ListOfExpensesFragment extends Fragment {
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         Cursor cursorIncome;
         Cursor cursorExpense;
-        if(chooseYear == ""){
+        if (chooseYear == "") {
             cursorExpense = db.getExpensesByMonth(month, signInAccount.getEmail(), currentYear);
-            cursorIncome = db.getIncomeByMonth(month, signInAccount.getEmail(),currentYear);
-        }else{
+            cursorIncome = db.getIncomeByMonth(month, signInAccount.getEmail(), currentYear);
+        } else {
             cursorExpense = db.getExpensesByMonth(month, signInAccount.getEmail(), chooseYear);
-            cursorIncome = db.getIncomeByMonth(month,signInAccount.getEmail(), chooseYear);
+            cursorIncome = db.getIncomeByMonth(month, signInAccount.getEmail(), chooseYear);
         }
         if (cursorExpense.getCount() == 0 && cursorIncome.getCount() == 0) {
             emptyImage.setVisibility(View.VISIBLE);
@@ -195,15 +212,26 @@ public class ListOfExpensesFragment extends Fragment {
         } else {
             while (cursorExpense.moveToNext()) {
                 arrayListExpenseId.add(cursorExpense.getString(0));
-                arrayListExpensesValue.add(cursorExpense.getString(1));
+                arrayListExpensesValue.add("- " + cursorExpense.getString(1) + " zł");
+
+                //Dalej jest 0.0 idk
+//                String x = cursorExpense.getString(1);
+//                Double y = Double.valueOf(x);
+//                DecimalFormat decim = new DecimalFormat("0.00");
+//                Double yy = Double.parseDouble(decim.format(y));
+//                String xx = String.valueOf(yy);
+//                arrayListExpensesValue.add(xx);
+
+
+
                 arrayListExpenseCategory.add(cursorExpense.getString(2));
                 arrayListExpenseDate.add(cursorExpense.getString(4));
                 arrayListExpenseDescription.add(cursorExpense.getString(5));
                 arrayListExpenseMonth.add(cursorExpense.getString(6));
             }
-            while (cursorIncome.moveToNext()){
+            while (cursorIncome.moveToNext()) {
                 arrayListExpenseId.add(cursorIncome.getString(0));
-                arrayListExpensesValue.add(cursorIncome.getString(1));
+                arrayListExpensesValue.add("+ " + cursorIncome.getString(1) + " zł");
                 arrayListExpenseCategory.add("Przychód");
                 arrayListExpenseDate.add(cursorIncome.getString(2));
                 arrayListExpenseDescription.add(cursorIncome.getString(3));
@@ -213,7 +241,6 @@ public class ListOfExpensesFragment extends Fragment {
             noData.setVisibility(View.GONE);
         }
     }
-
 
 
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +35,7 @@ public class CategoriesFragment extends Fragment {
     ArrayList<String> categoriesName;
     CustomAdapterRVCategories mCustomAdapterRVCategories;
     FloatingActionButton floatingRemoveButton, floatingAddButton;
-    Button addButton, removeButton;
+    AppCompatButton addButton, removeButton;
     EditText editTextCategoryNameAdd, editTextCategoryNameRemove;
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;

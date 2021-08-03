@@ -3,8 +3,9 @@
     android:layout_width="350dp"
     android:layout_height="475dp"
     android:orientation="vertical"
-    android:background="@color/cardview_dark_background"
+    android:background="#d9d9d9"
     android:layout_gravity="center"
+    android:gravity="center"
     android:padding="5dp">
 
     <EditText
@@ -13,7 +14,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Description"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textAlignment="center"/>
 
     <EditText
         android:id="@+id/editTextValueOfExpense"
@@ -21,38 +24,56 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="value"
-        android:inputType="numberDecimal" />
+        android:hint="Value"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:textAlignment="center"/>
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:minHeight="48dp"
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/tvDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Date" />
+        android:layout_width="127dp"
+        android:layout_height="47dp"
+        android:gravity="center"
+        android:hint="Date"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonPopupCalendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DATE" />
+        android:text="DATE"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/custom_add_expense_button"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonExpensePopupAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dodaj" />
+        android:layout_marginTop="20dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="Dodaj"
+        android:background="@drawable/custom_add_expense_button"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonPopupCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Anuluj" />
+        android:layout_marginTop="20dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/custom_add_expense_button"
+        android:text="Anuluj"/>
+
 
 
 </LinearLayout>

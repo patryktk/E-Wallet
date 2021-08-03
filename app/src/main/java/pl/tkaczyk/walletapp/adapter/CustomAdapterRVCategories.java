@@ -37,7 +37,7 @@ public class CustomAdapterRVCategories extends RecyclerView.Adapter<CustomAdapte
     @Override
     public void onBindViewHolder(@NonNull @NotNull CustomAdapterRVCategories.MyViewHolder holder, int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        myViewHolder.categoriesName.setText(String.valueOf(arrayCategoriesName.get(position)));
+        myViewHolder.categoriesName.setText(String.valueOf("•\t" + arrayCategoriesName.get(position)));
     }
 
     @Override

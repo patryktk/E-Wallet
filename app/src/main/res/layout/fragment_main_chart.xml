@@ -4,7 +4,7 @@
     android:id="@+id/fragment_main_chart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/gradient_back_main">
 
 
     <ImageView
@@ -18,8 +18,8 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="80dp"
-        android:alpha="0.1"
         android:layout_marginBottom="180dp"
+        android:alpha="0.1"
         app:srcCompat="@drawable/ic_emptyimg" />
 
     <TextView
@@ -35,14 +35,6 @@
         android:text="No Data. Add Expense"
         android:textAlignment="center" />
 
-    <ImageView
-        android:id="@+id/imageViewMainFragmentAddExpense"
-        android:layout_width="56dp"
-        android:layout_height="58dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="524dp"
-        android:src="@drawable/plus" />
-
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"
         android:layout_width="344dp"
@@ -50,18 +42,51 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="100dp" />
 
-    <Button
-        android:id="@+id/buttonMainFragmentSwitchEI"
-        android:layout_width="wrap_content"
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/appButtonMainFragmentSwitchEI"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:text="Switch" />
+        android:layout_marginStart="290dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_add_expense_button"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="To Income"
+        android:textAllCaps="false"
+        android:textSize="17sp" />
+
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:text="Expenses" />
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="20dp"
+        android:alpha="0.25"
+        android:text="Expenses"
+        android:textSize="24sp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonAddExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="524dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        app:srcCompat="@drawable/plus1"
+        android:foreground="?attr/selectableItemBackground"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonAddExpense2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="350dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        app:srcCompat="@drawable/plus1"
+        android:foreground="?attr/selectableItemBackground"/>
 
 
 </RelativeLayout>

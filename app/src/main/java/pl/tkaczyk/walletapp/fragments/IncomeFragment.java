@@ -2,13 +2,13 @@ package pl.tkaczyk.walletapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -28,6 +29,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,12 +44,14 @@ public class IncomeFragment extends Fragment {
     String saldo, currentMonth;
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
-    private Button cancelButton, addButton, dateButton;
+    private AppCompatButton cancelButton, addButton, dateButton;
     private EditText valueIncomeEditText, descriptionEditText;
     private int day, month, year;
     private String date, monthName;
-    private TextView tvDate;
+    private TextView tvDate, noData;
     private PieChart mPieChart;
+    private FloatingActionButton floatingActionButton, floatingActionButton2;
+    private ImageView noDataImg;
 
     @Nullable
     @Override
@@ -62,19 +66,46 @@ public class IncomeFragment extends Fragment {
         db = new DataBaseHelper(getContext());
         currentMonth = pickMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
         mPieChart = getView().findViewById(R.id.chart_income);
+        floatingActionButton = getView().findViewById(R.id.floatingActionButtonAddIncome);
+        floatingActionButton2 = getView().findViewById(R.id.floatingActionButtonAddIncome2);
+        noDataImg = getView().findViewById(R.id.noDataIncomeImg);
+        noData = getView().findViewById(R.id.noDataIncome);
 
         accountBalance();
-        setupPieChart(saldo);
-        makeChart(currentMonth);
+        setup(saldo,currentMonth);
 
 
-        Button switchButton = getView().findViewById(R.id.buttonIncomeSwitchEI2);
+        AppCompatButton switchButton = getView().findViewById(R.id.appButtonIncomeFragmentSwitchIE);
         switchButton.setOnClickListener(v -> {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainChartFragment()).commit();
         });
 
-        ImageView imageView = getView().findViewById(R.id.imageViewIncomeAddExpense);
-        imageView.setOnClickListener(view -> createNewDialog());
+
+        floatingActionButton.setOnClickListener(view -> createNewDialog());
+        floatingActionButton2.setOnClickListener(view -> createNewDialog());
+
+    }
+
+    private void setup(String saldo, String currentMonth) {
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+
+        Cursor cursor;
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        cursor = db.getIncomeByMonth(currentMonth, signInAccount.getEmail(), currentYear);
+        if(cursor.getCount()>0){
+            floatingActionButton2.setVisibility(View.GONE);
+            floatingActionButton.setVisibility(View.VISIBLE);
+            noData.setVisibility(View.GONE);
+            noDataImg.setVisibility(View.GONE);
+            setupPieChart(saldo);
+            makeChart(currentMonth);
+        }else {
+            floatingActionButton2.setVisibility(View.VISIBLE);
+            floatingActionButton.setVisibility(View.GONE);
+            noData.setVisibility(View.VISIBLE);
+            noDataImg.setVisibility(View.VISIBLE);
+            mPieChart.setNoDataText("");
+        }
     }
 
     private void accountBalance() {
@@ -146,9 +177,9 @@ public class IncomeFragment extends Fragment {
         dialog = dialogBuilder.create();
         dialog.show();
 
-        cancelButton = (Button) popupView.findViewById(R.id.buttonIncomePopupCancel);
-        addButton = (Button) popupView.findViewById(R.id.buttonIncomePopupAdd);
-        dateButton = (Button) popupView.findViewById(R.id.buttonIncomePopupCalendar);
+        cancelButton = (AppCompatButton) popupView.findViewById(R.id.buttonIncomePopupCancel);
+        addButton = (AppCompatButton) popupView.findViewById(R.id.buttonIncomePopupAdd);
+        dateButton = (AppCompatButton) popupView.findViewById(R.id.buttonIncomePopupCalendar);
         valueIncomeEditText = (EditText) popupView.findViewById(R.id.editTextValueOfIncome);
         descriptionEditText = (EditText) popupView.findViewById(R.id.editTextIncomeNameAdd);
         tvDate = (TextView) popupView.findViewById(R.id.tvIncomeDate);

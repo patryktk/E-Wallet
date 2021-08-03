@@ -11,7 +11,8 @@
         android:layout_marginBottom="80dp"
         android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@android:color/transparent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonAdd"
@@ -23,7 +24,8 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        app:srcCompat="@drawable/plus1" />
+        app:srcCompat="@drawable/plus1"
+        android:foreground="?attr/selectableItemBackground"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonRemove"
@@ -36,6 +38,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        app:srcCompat="@drawable/minus" />
+        app:srcCompat="@drawable/minus"
+        android:foreground="?attr/selectableItemBackground"/>
 
 </RelativeLayout>

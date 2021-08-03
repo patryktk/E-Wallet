@@ -1,22 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_income"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageViewIncomeAddExpense"
-        android:layout_width="56dp"
-        android:layout_height="58dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="524dp"
-        android:src="@drawable/plus" />
 
-    <Button
-        android:id="@+id/buttonIncomeSwitchEI2"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/noDataIncomeImg"
+        android:layout_width="141dp"
+        android:layout_height="133dp"
+        android:layout_alignStart="@+id/chart_income"
+        android:layout_alignTop="@+id/chart_income"
+        android:layout_alignEnd="@+id/chart_income"
+        android:layout_alignBottom="@+id/chart_income"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="180dp"
+        android:alpha="0.1"
+        app:srcCompat="@drawable/ic_emptyimg" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/appButtonIncomeFragmentSwitchIE"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:text="Switch" />
+        android:layout_marginStart="290dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_add_expense_button"
+        android:text="To Expenses"
+        android:textAllCaps="false"
+        android:textSize="17sp"
+        android:foreground="?attr/selectableItemBackground"/>
+
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart_income"
@@ -26,9 +42,47 @@
         android:layout_marginTop="100dp" />
 
     <TextView
+        android:id="@+id/noDataIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/noDataIncomeImg"
+        android:layout_alignTop="@+id/noDataIncomeImg"
+        android:layout_alignEnd="@+id/noDataIncomeImg"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="0dp"
+        android:text="No Data. Add Income"
+        android:textAlignment="center" />
+
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="20dp"
+        android:alpha="0.25"
         android:text="Income"
-        android:layout_marginStart="160dp"/>
+        android:textSize="24sp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonAddIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="524dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        app:srcCompat="@drawable/plus1"
+        android:foreground="?attr/selectableItemBackground"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonAddIncome2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="350dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        app:srcCompat="@drawable/plus1"
+        android:foreground="?attr/selectableItemBackground"/>
 </RelativeLayout>

@@ -46,7 +46,6 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
     @Override
     public void onBindViewHolder(@NonNull @NotNull AdapterRVExpenses.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.expenseId.setText(String.valueOf(arrayExpenseId.get(position)));
         viewHolder.expenseValue.setText(String.valueOf(arrayExpenseValue.get(position)));
         viewHolder.expenseCategory.setText(String.valueOf(arrayExpenseCategory.get(position)));
         viewHolder.expenseDate.setText(String.valueOf(arrayExpenseDate.get(position)));
@@ -90,7 +89,6 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            expenseId = itemView.findViewById(R.id.textViewExpenseRowID);
             expenseValue = itemView.findViewById(R.id.textViewExpenseRowValue);
             expenseDate = itemView.findViewById(R.id.textViewExpenseRowDate);
             expenseCategory = itemView.findViewById(R.id.textViewExpenseRowCategory);

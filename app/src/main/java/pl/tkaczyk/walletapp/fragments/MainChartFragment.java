@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -43,6 +44,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +64,7 @@ public class MainChartFragment extends Fragment {
     private AlertDialog dialog;
     private AlertDialog.Builder dialogBuilder;
     private Button cancelButton, addButton, dateButton;
+    private AppCompatButton cancelButton1, addButton1, dateButton1;
     private EditText valueExpenseEditText, descriptionEditText;
     private Spinner spinner;
     private int day, month, year;
@@ -69,6 +72,7 @@ public class MainChartFragment extends Fragment {
     private TextView tvDate, noData;
     private PieChart mPieChart;
     ImageView noDataImg;
+    private FloatingActionButton floatingActionButton, floatingActionButton2;
 
     @Nullable
     @Override
@@ -84,20 +88,22 @@ public class MainChartFragment extends Fragment {
         mPieChart = getView().findViewById(R.id.chart);
         noData = getView().findViewById(R.id.noDataMain);
         noDataImg = getView().findViewById(R.id.noDataMainImg);
+        floatingActionButton = getView().findViewById(R.id.floatingActionButtonAddExpense);
+        floatingActionButton2 = getView().findViewById(R.id.floatingActionButtonAddExpense2);
         primaryCategories();
 
         accountBalance();
         setup(currentMonth,saldo);
 
 
-        ImageView imageView = getView().findViewById(R.id.imageViewMainFragmentAddExpense);
-        imageView.setOnClickListener(view -> createNewDialog());
+        floatingActionButton.setOnClickListener(view -> createNewDialog());
+        floatingActionButton2.setOnClickListener(view -> createNewDialog());
 
-        Button buttonSwitch = getView().findViewById(R.id.buttonMainFragmentSwitchEI);
-        buttonSwitch.setOnClickListener(v -> {
+        AppCompatButton appCompatButton = getView().findViewById(R.id.appButtonMainFragmentSwitchEI);
+        appCompatButton.setOnClickListener(v ->{
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, new IncomeFragment()).commit();
-
         });
+
 
     }
     void setup(String month, String saldo){
@@ -107,6 +113,8 @@ public class MainChartFragment extends Fragment {
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         cursor = db.getExpensesByMonthChart(month,signInAccount.getEmail(), currentYear);
         if(cursor.getCount()>0){
+            floatingActionButton2.setVisibility(View.GONE);
+            floatingActionButton.setVisibility(View.VISIBLE);
             noData.setVisibility(View.GONE);
             noDataImg.setVisibility(View.GONE);
             setupPieChart(saldo);
@@ -122,6 +130,8 @@ public class MainChartFragment extends Fragment {
                 }
             });
             alert.show();
+            floatingActionButton2.setVisibility(View.VISIBLE);
+            floatingActionButton.setVisibility(View.GONE);
             noData.setVisibility(View.VISIBLE);
             noDataImg.setVisibility(View.VISIBLE);
             mPieChart.setNoDataText("");

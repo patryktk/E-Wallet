@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
     android:layout_height="475dp"
-    android:orientation="vertical"
-    android:background="@color/cardview_dark_background"
     android:layout_gravity="center"
-    android:padding="5dp">
+    android:alpha="0.9"
+    android:background="#d9d9d9"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:gravity="center">
 
     <EditText
         android:id="@+id/editTextIncomeNameAdd"
@@ -13,7 +15,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Description"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textAlignment="center" />
 
     <EditText
         android:id="@+id/editTextValueOfIncome"
@@ -21,32 +25,49 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="value"
-        android:inputType="numberDecimal" />
+        android:hint="Value"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvIncomeDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Date" />
+        android:layout_width="127dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:hint="Date"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonIncomePopupCalendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DATE" />
+        android:foreground="?attr/selectableItemBackground"
+        android:text="DATE"
+        android:background="@drawable/custom_add_expense_button"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonIncomePopupAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dodaj" />
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginTop="20dp"
+        android:text="Dodaj"
+        android:background="@drawable/custom_add_expense_button"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonIncomePopupCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Anuluj" />
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_add_expense_button"
+        android:text="Anuluj"/>
+
+
 
 
 </LinearLayout>
