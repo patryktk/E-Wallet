@@ -3,9 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.403125" />
         <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/custom_add_expense_button.xml" value="0.403125" />
         <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/gradient_back_avatar.xml" value="0.403125" />
         <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/gradient_back_main.xml" value="0.403125" />
+        <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/ic_categories_background.xml" value="0.403125" />
+        <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/ic_categories_foreground.xml" value="0.403125" />
+        <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/ic_home_icon.xml" value="0.403125" />
+        <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.403125" />
+        <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/drawable/ic_logout_icon.xml" value="0.403125" />
         <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/layout/activity_home.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/layout/budget_row.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/patri/AndroidStudioProjects/WalletApp/app/src/main/res/layout/categories_row.xml" value="0.38697916666666665" />

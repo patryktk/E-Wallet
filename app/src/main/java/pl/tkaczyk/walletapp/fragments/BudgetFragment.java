@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -51,7 +50,7 @@ public class BudgetFragment extends Fragment {
     AdapterBudget mAdapterBudget;
     RecyclerView mRecyclerView;
     AppCompatButton yearButton;
-    int barPosition =0;
+    int barPosition = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,7 @@ public class BudgetFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 //index of selected bar
-                barPosition = mBarChart.getBarData().getDataSetForEntry(e).getEntryIndex((BarEntry)e);
+                barPosition = mBarChart.getBarData().getDataSetForEntry(e).getEntryIndex((BarEntry) e);
                 listOfExpenses(barPosition, view);
             }
 
@@ -101,9 +100,18 @@ public class BudgetFragment extends Fragment {
         int rok = today.get(Calendar.YEAR);
         MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(view.getContext(),
                 (selectedMonth, selectedYear) -> {
-                    listOfExpenses(barPosition, view);
                     chooseYear = String.valueOf(selectedYear);
                     yearButton.setText(String.valueOf(selectedYear));
+
+                    clearChart();
+
+                    setupBarChart();
+                    setDataInChart();
+
+                    mBarChart.groupBars(1, 0.1f, 0.02f);
+                    mBarChart.setVisibleXRange(0.2f,2.5f);
+                    mBarChart.invalidate();
+                    //odświeżyć wykres, zmieniaja się wartości, ale wygląd wykresu już nie ;-;
                 }, rok, miesiac);
         builder.setActivatedYear(rok)
                 .setTitle("Select year")
@@ -115,10 +123,9 @@ public class BudgetFragment extends Fragment {
         String monthOfBar = pickMonth(x + 1);
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
-        if(chooseYear == ""){
+        if (chooseYear == "") {
             incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar, signInAccount.getEmail(), currentYear).toString() + " zł");
-        }
-        else{
+        } else {
             incomeValue.setText(db.getSumOfIncomeByMonth2(monthOfBar, signInAccount.getEmail(), chooseYear).toString() + " zł");
         }
 
@@ -136,13 +143,13 @@ public class BudgetFragment extends Fragment {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         Cursor cursor;
-        if(chooseYear == ""){
+        if (chooseYear == "") {
             cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail(), currentYear);
-        }else {
+        } else {
             cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail(), chooseYear);
 
         }
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             arrayListBudgetValue.add(cursor.getString(0) + " zł");
             arrayListBudgetCategory.add(cursor.getString(1));
         }
@@ -154,19 +161,24 @@ public class BudgetFragment extends Fragment {
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
-        Float currentMonth = Calendar.getInstance().get(Calendar.MONTH) +1f;
+        Float currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1f;
 
         double d;
-        for (int i = 1; i < 12; i++) {
-            if(chooseYear == ""){
-                d =  db.getSumOfIncomeByMonth2(pickMonth(i), signInAccount.getEmail(), currentYear);
+
+        if(chooseYear == ""){
+            for(int i = 1; i < 12; i++){
+                d = db.getSumOfIncomeByMonth2(pickMonth(i), signInAccount.getEmail(), currentYear);
+                float f = (float) d;
+                barEntries.add(new BarEntry(i, f));
             }
-            else{
-                d =  db.getSumOfIncomeByMonth2(pickMonth(i), signInAccount.getEmail(), chooseYear);
+        }else{
+            for(int i = 1; i < 12; i++){
+                d = db.getSumOfIncomeByMonth2(pickMonth(i), signInAccount.getEmail(), chooseYear);
+                float f = (float) d;
+                barEntries.add(new BarEntry(i, f));
             }
-            float f = (float) d;
-            barEntries.add(new BarEntry(i, f));
         }
+
         barEntries.add(new BarEntry(13, 0));
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Przychody");
@@ -176,10 +188,10 @@ public class BudgetFragment extends Fragment {
         ArrayList<BarEntry> barEntries1 = new ArrayList<>();
         double x;
         for (int i = 1; i < 12; i++) {
-            if(chooseYear == ""){
-                x =  db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail(),currentYear);
-            }else{
-                x =  db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail(), chooseYear);
+            if (chooseYear == "") {
+                x = db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail(), currentYear);
+            } else {
+                x = db.getSumOfExpenseByMonth2(pickMonth(i), signInAccount.getEmail(), chooseYear);
             }
 
             float f = (float) x;
@@ -203,22 +215,26 @@ public class BudgetFragment extends Fragment {
         mBarChart.groupBars(1, groupSpace, barSpace);
 
     }
+    private void clearChart(){
+        mBarChart.clear();
+        mBarChart.invalidate();
+    }
 
     private void setupBarChart() {
         db = new DataBaseHelper(getContext());
         mBarChart.setXAxisRenderer(new CustomXAxisRender(mBarChart.getViewPortHandler(), mBarChart.getXAxis(), mBarChart.getTransformer(YAxis.AxisDependency.LEFT)));
-        String[] labels = {"","Jan \n"+ moneyBallance("Styczeń") +"zł",
-                "Feb \n" + moneyBallance("Luty") +"zł",
-                "Mar \n" + moneyBallance("Marzec") +"zł",
-                "Apr \n" + moneyBallance("Kwiecień") +"zł",
-                "May \n" + moneyBallance("Maj") +"zł",
-                "June \n" + moneyBallance("Czerwiec") +"zł",
-                "Jul \n" + moneyBallance("Lipiec") +"zł",
-                "Aug \n" + moneyBallance("Sierpień") +"zł",
-                "Sept \n" + moneyBallance("Wrzesień") +"zł",
-                "Oct \n" + moneyBallance("Październik") +"zł",
-                "Nov \n" + moneyBallance("Listopad") +"zł",
-                "Dec \n" + moneyBallance("Grudzień") +"zł"
+        String[] labels = {"", "Jan \n" + moneyBallance("Styczeń") + "zł",
+                "Feb \n" + moneyBallance("Luty") + "zł",
+                "Mar \n" + moneyBallance("Marzec") + "zł",
+                "Apr \n" + moneyBallance("Kwiecień") + "zł",
+                "May \n" + moneyBallance("Maj") + "zł",
+                "June \n" + moneyBallance("Czerwiec") + "zł",
+                "Jul \n" + moneyBallance("Lipiec") + "zł",
+                "Aug \n" + moneyBallance("Sierpień") + "zł",
+                "Sept \n" + moneyBallance("Wrzesień") + "zł",
+                "Oct \n" + moneyBallance("Październik") + "zł",
+                "Nov \n" + moneyBallance("Listopad") + "zł",
+                "Dec \n" + moneyBallance("Grudzień") + "zł"
         };
         XAxis xAxis = mBarChart.getXAxis();
         xAxis.setCenterAxisLabels(true);
@@ -235,24 +251,25 @@ public class BudgetFragment extends Fragment {
         mBarChart.setDrawGridBackground(true);
 
     }
-    public String moneyBallance(String month){
+
+    public String moneyBallance(String month) {
         String saldo;
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         db = new DataBaseHelper(getContext());
         double wydatki;
-        if(chooseYear == ""){
-             wydatki = db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), currentYear);
-        }else {
+        if (chooseYear == "") {
+            wydatki = db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), currentYear);
+        } else {
             wydatki = db.getSumOfExpenseByMonth2(month, signInAccount.getEmail(), chooseYear);
         }
         double przychód;
-        if(chooseYear == ""){
-            przychód =  db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), currentYear);
-        }else {
-            przychód =  db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), chooseYear);
+        if (chooseYear == "") {
+            przychód = db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), currentYear);
+        } else {
+            przychód = db.getSumOfIncomeByMonth2(month, signInAccount.getEmail(), chooseYear);
         }
-        double różnica = przychód  - wydatki;
+        double różnica = przychód - wydatki;
 
         saldo = String.format("%.2f", różnica);
         if (wydatki > przychód) {
@@ -261,23 +278,7 @@ public class BudgetFragment extends Fragment {
         return saldo;
 
     }
-    public class CustomXAxisRender extends XAxisRenderer{
 
-        public CustomXAxisRender(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
-            super(viewPortHandler, xAxis, trans);
-        }
-
-        @Override
-        protected void drawLabel(Canvas c, String formattedLabel, float x, float y,
-                                 MPPointF anchor, float angleDegrees) {
-            String line[] = formattedLabel.split("\n");
-            Utils.drawXAxisValue(c, line[0], x, y, mAxisLabelPaint, anchor, angleDegrees);
-            for (int i = 1; i < line.length; i++) { // we've already processed 1st line
-                Utils.drawXAxisValue(c, line[i], x, y + mAxisLabelPaint.getTextSize() * i,
-                        mAxisLabelPaint, anchor, angleDegrees);
-            }
-        }
-    }
     private String pickMonth(int month) {
 
         switch (month) {
@@ -320,6 +321,24 @@ public class BudgetFragment extends Fragment {
 
         }
         return monthName;
+    }
+
+    public class CustomXAxisRender extends XAxisRenderer {
+
+        public CustomXAxisRender(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
+            super(viewPortHandler, xAxis, trans);
+        }
+
+        @Override
+        protected void drawLabel(Canvas c, String formattedLabel, float x, float y,
+                                 MPPointF anchor, float angleDegrees) {
+            String line[] = formattedLabel.split("\n");
+            Utils.drawXAxisValue(c, line[0], x, y, mAxisLabelPaint, anchor, angleDegrees);
+            for (int i = 1; i < line.length; i++) { // we've already processed 1st line
+                Utils.drawXAxisValue(c, line[i], x, y + mAxisLabelPaint.getTextSize() * i,
+                        mAxisLabelPaint, anchor, angleDegrees);
+            }
+        }
     }
 
 }

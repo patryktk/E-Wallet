@@ -11,22 +11,22 @@
             android:title="Home" />
         <item
             android:id="@+id/nav_categories"
-            android:icon="@drawable/ic_home_icon"
+            android:icon="@drawable/ic_category"
             android:foreground="?attr/selectableItemBackground"
             android:title="Categories" />
         <item
             android:id="@+id/nav_expenses"
-            android:icon="@drawable/ic_home_icon"
+            android:icon="@drawable/ic_money_profit"
             android:foreground="?attr/selectableItemBackground"
             android:title="Expenses" />
         <item
             android:id="@+id/nav_budget"
-            android:icon="@drawable/ic_home_icon"
+            android:icon="@drawable/ic_audit"
             android:foreground="?attr/selectableItemBackground"
             android:title="Budget" />
     </group>
 
-    <item android:title="Action">
+    <item android:title="Ustawienia">
         <menu>
             <item
                 android:id="@+id/nav_logout"

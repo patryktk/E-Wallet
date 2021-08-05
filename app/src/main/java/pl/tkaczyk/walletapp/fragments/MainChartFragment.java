@@ -201,6 +201,7 @@ public class MainChartFragment extends Fragment {
                     date = dayOfMonth + "/" + month + "/" + year;
                     tvDate.setText(date);
                     monthName = pickMonth(month);
+                    chooseYear = String.valueOf(year);
                 }
             }, year, month, day);
             datePickerDialog.show();
@@ -275,10 +276,10 @@ public class MainChartFragment extends Fragment {
         String categoryOfExpense = spinner.getSelectedItem().toString();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String descriptionOfExpense = descriptionEditText.getText().toString();
-        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+//        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
         Expenses expenses;
-        expenses = new Expenses(-1,valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense, monthName, year);
+        expenses = new Expenses(-1,valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense, monthName, chooseYear);
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
         boolean success = dataBaseHelper.addOne(expenses);
