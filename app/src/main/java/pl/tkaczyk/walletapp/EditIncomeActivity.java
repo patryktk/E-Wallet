@@ -1,6 +1,7 @@
 package pl.tkaczyk.walletapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
@@ -24,7 +25,7 @@ public class EditIncomeActivity extends AppCompatActivity {
 
     EditText editTextValue, editTextDescription;
     TextView tvDate;
-    Button updateButton, deleteButton, dateButton;
+    AppCompatButton updateButton, deleteButton, dateButton;
     DataBaseHelper db;
 
     String id, category, date, description, month;

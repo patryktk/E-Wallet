@@ -76,7 +76,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void notifier() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("My notification", "My Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("notifyWallet", "My Notification", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         long timeAtClick = System.currentTimeMillis();
-        long tenSeconds = 3600000;
+        long tenSeconds = 1000 * 10;
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtClick + tenSeconds, pendingIntent);
 
