@@ -276,7 +276,6 @@ public class MainChartFragment extends Fragment {
         String categoryOfExpense = spinner.getSelectedItem().toString();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String descriptionOfExpense = descriptionEditText.getText().toString();
-//        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
         Expenses expenses;
         expenses = new Expenses(-1,valueOfExpense, categoryOfExpense, signInAccount.getEmail(), date, descriptionOfExpense, monthName, chooseYear);

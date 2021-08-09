@@ -30,7 +30,7 @@ import pl.tkaczyk.walletapp.adapter.AdapterRVExpenses;
 public class ListOfExpensesFragment extends Fragment {
     RecyclerView mRecyclerView;
     DataBaseHelper db;
-    ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseId, arrayListExpenseDescription, arrayListExpenseMonth;
+    ArrayList<String> arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseId, arrayListExpenseDescription, arrayListExpenseMonth, arrayListMark;
     AdapterRVExpenses mAdapterRVExpenses;
     AppCompatButton buttonExpenseMonthName;
     String monthName, chooseYear = "";
@@ -99,10 +99,11 @@ public class ListOfExpensesFragment extends Fragment {
         arrayListExpenseDate = new ArrayList<>();
         arrayListExpenseDescription = new ArrayList<>();
         arrayListExpenseMonth = new ArrayList<>();
+        arrayListMark = new ArrayList<>();
         storeDataInArrays(month);
 
 
-        mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpenseId, arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseDescription, arrayListExpenseMonth);
+        mAdapterRVExpenses = new AdapterRVExpenses(getContext(), arrayListExpenseId, arrayListExpensesValue, arrayListExpenseDate, arrayListExpenseCategory, arrayListExpenseDescription, arrayListExpenseMonth, arrayListMark);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapterRVExpenses);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -212,7 +213,7 @@ public class ListOfExpensesFragment extends Fragment {
         } else {
             while (cursorExpense.moveToNext()) {
                 arrayListExpenseId.add(cursorExpense.getString(0));
-                arrayListExpensesValue.add("- " + cursorExpense.getString(1) + " zł");
+                arrayListExpensesValue.add(cursorExpense.getString(1));
 
                 //Dalej jest 0.0 idk
 //                String x = cursorExpense.getString(1);
@@ -222,20 +223,20 @@ public class ListOfExpensesFragment extends Fragment {
 //                String xx = String.valueOf(yy);
 //                arrayListExpensesValue.add(xx);
 
-
-
                 arrayListExpenseCategory.add(cursorExpense.getString(2));
                 arrayListExpenseDate.add(cursorExpense.getString(4));
                 arrayListExpenseDescription.add(cursorExpense.getString(5));
                 arrayListExpenseMonth.add(cursorExpense.getString(6));
+                arrayListMark.add("-");
             }
             while (cursorIncome.moveToNext()) {
                 arrayListExpenseId.add(cursorIncome.getString(0));
-                arrayListExpensesValue.add("+ " + cursorIncome.getString(1) + " zł");
+                arrayListExpensesValue.add(cursorIncome.getString(1));
                 arrayListExpenseCategory.add("Przychód");
                 arrayListExpenseDate.add(cursorIncome.getString(2));
                 arrayListExpenseDescription.add(cursorIncome.getString(3));
                 arrayListExpenseMonth.add(cursorIncome.getString(4));
+                arrayListMark.add("+");
             }
             emptyImage.setVisibility(View.GONE);
             noData.setVisibility(View.GONE);

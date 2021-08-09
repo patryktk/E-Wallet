@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Description"
+        android:hint="@string/opis"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textAlignment="center" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="Value"
+        android:hint="@string/wartosc"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
         android:textAlignment="center" />
@@ -36,7 +36,7 @@
         android:layout_height="47dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:hint="Date"
+        android:hint="@string/data"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="16sp" />
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
-        android:text="DATE"
+        android:text="@string/data"
         android:background="@drawable/custom_add_expense_button"/>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
         android:layout_marginTop="20dp"
-        android:text="Dodaj"
+        android:text="@string/data"
         android:background="@drawable/custom_add_expense_button"/>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -65,7 +65,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:layout_marginTop="20dp"
         android:background="@drawable/custom_add_expense_button"
-        android:text="Anuluj"/>
+        android:text="@string/anuluj"/>
 
 
 

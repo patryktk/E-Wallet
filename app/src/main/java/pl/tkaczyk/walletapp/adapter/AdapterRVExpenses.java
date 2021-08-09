@@ -22,9 +22,9 @@ import pl.tkaczyk.walletapp.R;
 public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.ViewHolder> {
 
     private Context mContext;
-    private ArrayList arrayExpenseId,arrayExpenseValue, arrayExpenseDate, arrayExpenseCategory, arrayExpenseDescription, arrayExpenseMonth;
+    private ArrayList arrayExpenseId,arrayExpenseValue, arrayExpenseDate, arrayExpenseCategory, arrayExpenseDescription, arrayExpenseMonth, arrayExpenseMark;
 
-    public AdapterRVExpenses(Context mContext, ArrayList arrayExpenseId, ArrayList arrayExpenseValue, ArrayList arrayExpenseDate, ArrayList arrayExpenseCategory, ArrayList arrayExpenseDescription, ArrayList arrayExpenseMonth) {
+    public AdapterRVExpenses(Context mContext, ArrayList arrayExpenseId, ArrayList arrayExpenseValue, ArrayList arrayExpenseDate, ArrayList arrayExpenseCategory, ArrayList arrayExpenseDescription, ArrayList arrayExpenseMonth, ArrayList arrayExpenseMark) {
         this.mContext = mContext;
         this.arrayExpenseId = arrayExpenseId;
         this.arrayExpenseValue = arrayExpenseValue;
@@ -32,6 +32,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
         this.arrayExpenseCategory = arrayExpenseCategory;
         this.arrayExpenseDescription = arrayExpenseDescription;
         this.arrayExpenseMonth = arrayExpenseMonth;
+        this.arrayExpenseMark = arrayExpenseMark;
     }
 
     @NonNull
@@ -50,6 +51,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
         viewHolder.expenseCategory.setText(String.valueOf(arrayExpenseCategory.get(position)));
         viewHolder.expenseDate.setText(String.valueOf(arrayExpenseDate.get(position)));
         viewHolder.expenseDescription.setText(String.valueOf(arrayExpenseDescription.get(position)));
+        viewHolder.expenseMark.setText(String.valueOf(arrayExpenseMark.get(position)));
 
         viewHolder.expenseRow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +63,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
                     intent.putExtra("Date", String.valueOf(arrayExpenseDate.get(position)));
                     intent.putExtra("Description", String.valueOf(arrayExpenseDescription.get(position)));
                     intent.putExtra("Month", String.valueOf(arrayExpenseMonth.get(position)));
+                    intent.putExtra("Mark", String.valueOf(arrayExpenseMark.get(position)));
                     mContext.startActivity(intent);
                 }else{
                     Intent intent = new Intent(mContext, EditExpenseActivity.class);
@@ -70,6 +73,8 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
                     intent.putExtra("Date", String.valueOf(arrayExpenseDate.get(position)));
                     intent.putExtra("Description", String.valueOf(arrayExpenseDescription.get(position)));
                     intent.putExtra("Month", String.valueOf(arrayExpenseMonth.get(position)));
+                    intent.putExtra("Mark", String.valueOf(arrayExpenseMark.get(position)));
+
                     mContext.startActivity(intent);
                 }
             }
@@ -83,7 +88,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView expenseId,expenseValue, expenseDate, expenseCategory, expenseDescription;
+        TextView expenseId,expenseValue, expenseDate, expenseCategory, expenseDescription, expenseMark;
         LinearLayout expenseRow;
 
 
@@ -93,6 +98,7 @@ public class AdapterRVExpenses extends RecyclerView.Adapter<AdapterRVExpenses.Vi
             expenseDate = itemView.findViewById(R.id.textViewExpenseRowDate);
             expenseCategory = itemView.findViewById(R.id.textViewExpenseRowCategory);
             expenseDescription = itemView.findViewById(R.id.textViewExpenseRowDescription);
+            expenseMark = itemView.findViewById(R.id.textViewExpenseMark);
 
             expenseRow = itemView.findViewById(R.id.expense_row);
 

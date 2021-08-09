@@ -8,22 +8,22 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_icon"
             android:foreground="?attr/selectableItemBackground"
-            android:title="Home" />
+            android:title="@string/głowna" />
         <item
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_category"
             android:foreground="?attr/selectableItemBackground"
-            android:title="Categories" />
+            android:title="@string/kategorie" />
         <item
             android:id="@+id/nav_expenses"
             android:icon="@drawable/ic_money_profit"
             android:foreground="?attr/selectableItemBackground"
-            android:title="Expenses" />
+            android:title="@string/wydatki" />
         <item
             android:id="@+id/nav_budget"
             android:icon="@drawable/ic_audit"
             android:foreground="?attr/selectableItemBackground"
-            android:title="Budget" />
+            android:title="@string/budget" />
     </group>
 
     <item android:title="Ustawienia">
@@ -32,7 +32,7 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout_icon"
                 android:foreground="?attr/selectableItemBackground"
-                android:title="Logout" />
+                android:title="@string/wyloguj" />
         </menu>
     </item>
 

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditExpenseActivity">
+    tools:context=".EditExpenseActivity"
+    android:background="@drawable/gradient_back_main">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarIncome"
@@ -12,7 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="#e6f0ff"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Income"
+            android:text="@string/edycja_przychodow"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
@@ -30,15 +31,19 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonEditIncomeEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
-        android:text="Edit"
+        android:text="@string/edycja"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/custom_add_expense_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonEditIncomeDate" />
+
+
 
     <EditText
         android:id="@+id/editTextEditIncomeDescription"
@@ -46,10 +51,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Description"
+        android:hint="@string/opis"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/editTextEditIncomeValue"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarIncome" />
 
     <EditText
         android:id="@+id/editTextEditIncomeValue"
@@ -57,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Value"
+        android:hint="@string/wartosc"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,30 +73,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Date"
+        android:hint="@string/data"
         app:layout_constraintEnd_toEndOf="@+id/editTextEditIncomeValue"
         app:layout_constraintStart_toStartOf="@+id/editTextEditIncomeValue"
         app:layout_constraintTop_toBottomOf="@+id/editTextEditIncomeValue" />
 
-    <Button
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonEditIncomeDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Date"
+        android:text="@string/data"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/custom_add_expense_button"
         app:layout_constraintEnd_toEndOf="@+id/tvEditIncomeDate"
         app:layout_constraintStart_toStartOf="@+id/tvEditIncomeDate"
         app:layout_constraintTop_toBottomOf="@+id/tvEditIncomeDate" />
 
-    <Button
-        android:id="@+id/buttonEditIncomeDelete"
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonEditIncomeDelete1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Remove"
+        android:text="@string/usuwanie"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/custom_add_expense_button"
         app:layout_constraintEnd_toEndOf="@+id/buttonEditIncomeEdit"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/buttonEditIncomeEdit"
         app:layout_constraintTop_toBottomOf="@+id/buttonEditIncomeEdit" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

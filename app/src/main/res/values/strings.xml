@@ -8,4 +8,29 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="usuwanie">Usuń</string>
+    <string name="edycja">Edycja</string>
+    <string name="anuluj">Anuluj</string>
+    <string name="data">Data</string>
+    <string name="dodaj">Dodaj</string>
+    <string name="wartosc">Wartość</string>
+    <string name="opis">Opis</string>
+    <string name="edycja_wydatkow">Edycja Wydatków</string>
+    <string name="edycja_przychodow">Edycja Przychodów</string>
+    <string name="facebok_login">Zaloguj się za pomocą Facebooka</string>
+    <string name="google_login">Zaloguj się za pomocą Google</string>
+    <string name="przychod">Przychody</string>
+    <string name="rok">Rok</string>
+    <string name="wydatki">Wydatki</string>
+    <string name="brak_danych_dodaj_przychód">Brak danych. Dodaj przychód</string>
+    <string name="brak_danych_dodaj_wydatek">Brak danych. Dodaj wydatek</string>
+    <string name="nazwa_kategori">Nazwa kategorii</string>
+
+    <string name="kategorie">Kategorie</string>
+    <string name="budget">Budżet</string>
+    <string name="wyloguj">Wyloguj się</string>
+    <string name="głowna">Strona Główna</string>
+
+
 </resources>

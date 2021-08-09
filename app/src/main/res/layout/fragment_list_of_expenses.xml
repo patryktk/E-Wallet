@@ -43,15 +43,19 @@
         android:foreground="?attr/selectableItemBackground"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewExpenses"
-        android:layout_width="413dp"
-        android:layout_height="555dp"
-        android:layout_marginTop="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="530dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,6 +64,7 @@
         android:layout_width="141dp"
         android:layout_height="133dp"
         android:layout_marginTop="150dp"
+        app:layout_constraintHorizontal_bias="0.5"
         android:alpha="0.1"
         android:src="@drawable/ic_emptyimg"
         android:visibility="visible"

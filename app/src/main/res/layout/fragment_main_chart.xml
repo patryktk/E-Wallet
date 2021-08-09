@@ -32,61 +32,63 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="0dp"
-        android:text="No Data. Add Expense"
+        android:text="@string/brak_danych_dodaj_wydatek"
         android:textAlignment="center" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"
         android:layout_width="344dp"
         android:layout_height="369dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="100dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="30dp" />
 
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/appButtonMainFragmentSwitchEI"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="290dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/textView"
         android:background="@drawable/custom_add_expense_button"
         android:foreground="?attr/selectableItemBackground"
-        android:text="To Income"
+        android:text="@string/przychod"
         android:textAllCaps="false"
         android:textSize="17sp" />
-
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:alpha="0.25"
-        android:text="Expenses"
+        android:text="@string/wydatki"
         android:textSize="24sp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonAddExpense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="524dp"
+        android:layout_marginEnd="50dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        app:srcCompat="@drawable/plus1"
-        android:foreground="?attr/selectableItemBackground"/>
+        android:foreground="?attr/selectableItemBackground"
+        app:srcCompat="@drawable/plus1" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonAddExpense2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="180dp"
         android:layout_marginTop="350dp"
+        android:layout_centerHorizontal="true"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        app:srcCompat="@drawable/plus1"
-        android:foreground="?attr/selectableItemBackground"/>
+        android:foreground="?attr/selectableItemBackground"
+        app:srcCompat="@drawable/plus1" />
 
 
 </RelativeLayout>

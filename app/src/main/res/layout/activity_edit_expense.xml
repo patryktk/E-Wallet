@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditExpenseActivity">
+    tools:context=".EditExpenseActivity"
+    android:background="@drawable/gradient_back_main">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -12,17 +13,18 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="#e6f0ff"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Expense"
+            android:text="@string/edycja_wydatkow"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
@@ -30,15 +32,18 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonEditExpenseEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
-        android:text="Edit"
+        android:background="@drawable/custom_add_expense_button"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/edycja"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonEditExpenseDate" />
+
 
     <EditText
         android:id="@+id/editTextEditExpenseDescription"
@@ -46,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Description"
+        android:hint="@string/opis"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/editTextEditExpenseValue"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -57,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Value"
+        android:hint="@string/wartosc"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,31 +73,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Date"
+        android:hint="@string/data"
         app:layout_constraintEnd_toEndOf="@+id/editTextEditExpenseValue"
         app:layout_constraintStart_toStartOf="@+id/editTextEditExpenseValue"
         app:layout_constraintTop_toBottomOf="@+id/editTextEditExpenseValue" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonEditExpenseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Date"
+        android:background="@drawable/custom_add_expense_button"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/data"
         app:layout_constraintEnd_toEndOf="@+id/tvEditExpenseDate"
         app:layout_constraintStart_toStartOf="@+id/tvEditExpenseDate"
         app:layout_constraintTop_toBottomOf="@+id/tvEditExpenseDate" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonEditExpenseDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Remove"
+        android:background="@drawable/custom_add_expense_button"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/usuwanie"
         app:layout_constraintEnd_toEndOf="@+id/buttonEditExpenseEdit"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/buttonEditExpenseEdit"
         app:layout_constraintTop_toBottomOf="@+id/buttonEditExpenseEdit" />
+
 
     <Spinner
         android:id="@+id/spinnerEditExpense"
