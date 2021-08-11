@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         long timeAtClick = System.currentTimeMillis();
-        long tenSeconds = 1000 * 10;
+        long tenSeconds = 1000 * 18000;
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtClick + tenSeconds, pendingIntent);
 

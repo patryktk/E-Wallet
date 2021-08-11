@@ -87,16 +87,16 @@ public class EditIncomeActivity extends AppCompatActivity {
     }
     void confirmDeleteDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete expense?");
-        builder.setMessage("Jesteś pewny że chcesz usunać ten wydatek?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle("Usunąć przychód?");
+        builder.setMessage("Jesteś pewny że chcesz usunać ten przychód?");
+        builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 db.deleteOneIncome(id);
                 finish();
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

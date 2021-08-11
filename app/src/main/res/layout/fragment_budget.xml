@@ -18,24 +18,26 @@
         android:id="@+id/textViewBudgetIncomeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/barChart"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="423dp"
+        android:layout_marginTop="20dp"
         android:text="@string/przychod"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textViewBudgetIncomeValue"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="178dp"
+        android:layout_marginStart="41dp"
         android:layout_marginTop="423dp"
         android:layout_marginEnd="32dp"
-        android:layout_toEndOf="@+id/textViewBudgetIncomeName"
-        android:text="2000zł"
-        android:textSize="18sp"
-        android:gravity="center"/>
+        android:layout_toEndOf="@+id/buttonBudgetYear"
+        android:gravity="center"
+        android:text="0zł"
+        android:textAlignment="textEnd"
+        android:textSize="18sp" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
@@ -47,7 +49,7 @@
         android:id="@+id/recyclerViewBudget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="464dp" >
+        android:layout_marginTop="464dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

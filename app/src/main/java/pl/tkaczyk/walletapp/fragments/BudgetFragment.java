@@ -223,18 +223,19 @@ public class BudgetFragment extends Fragment {
     private void setupBarChart() {
         db = new DataBaseHelper(getContext());
         mBarChart.setXAxisRenderer(new CustomXAxisRender(mBarChart.getViewPortHandler(), mBarChart.getXAxis(), mBarChart.getTransformer(YAxis.AxisDependency.LEFT)));
-        String[] labels = {"", "Jan \n" + moneyBallance("Styczeń") + "zł",
-                "Feb \n" + moneyBallance("Luty") + "zł",
+        String[] labels = {"",
+                "Sty \n" + moneyBallance("Styczeń") + "zł",
+                "Lut \n" + moneyBallance("Luty") + "zł",
                 "Mar \n" + moneyBallance("Marzec") + "zł",
-                "Apr \n" + moneyBallance("Kwiecień") + "zł",
-                "May \n" + moneyBallance("Maj") + "zł",
-                "June \n" + moneyBallance("Czerwiec") + "zł",
-                "Jul \n" + moneyBallance("Lipiec") + "zł",
-                "Aug \n" + moneyBallance("Sierpień") + "zł",
-                "Sept \n" + moneyBallance("Wrzesień") + "zł",
-                "Oct \n" + moneyBallance("Październik") + "zł",
-                "Nov \n" + moneyBallance("Listopad") + "zł",
-                "Dec \n" + moneyBallance("Grudzień") + "zł"
+                "Kwi \n" + moneyBallance("Kwiecień") + "zł",
+                "Maj \n" + moneyBallance("Maj") + "zł",
+                "Cze \n" + moneyBallance("Czerwiec") + "zł",
+                "Lip \n" + moneyBallance("Lipiec") + "zł",
+                "Sie \n" + moneyBallance("Sierpień") + "zł",
+                "Wrz \n" + moneyBallance("Wrzesień") + "zł",
+                "Paź \n" + moneyBallance("Październik") + "zł",
+                "Lis \n" + moneyBallance("Listopad") + "zł",
+                "Gru \n" + moneyBallance("Grudzień") + "zł"
         };
         XAxis xAxis = mBarChart.getXAxis();
         xAxis.setCenterAxisLabels(true);
@@ -249,6 +250,7 @@ public class BudgetFragment extends Fragment {
         mBarChart.setMaxVisibleValueCount(50);
         mBarChart.setPinchZoom(false);
         mBarChart.setDrawGridBackground(true);
+        mBarChart.getDescription().setEnabled(false);
 
     }
 

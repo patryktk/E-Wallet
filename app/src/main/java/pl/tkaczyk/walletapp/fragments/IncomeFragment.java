@@ -215,6 +215,7 @@ public class IncomeFragment extends Fragment {
                 setupPieChart(saldo);
                 makeChart(currentMonth);
                 dialog.dismiss();
+                onStart();
             }
         });
 

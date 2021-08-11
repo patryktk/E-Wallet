@@ -27,15 +27,16 @@
                 android:layout_width="100dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="22dp"
+                android:gravity="center"
                 android:text="-50 zł"
+                android:textAlignment="textEnd"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textViewBudgetRowCategory"
-                app:layout_constraintTop_toTopOf="parent"
-                android:gravity="center"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewBudgetRowCategory"

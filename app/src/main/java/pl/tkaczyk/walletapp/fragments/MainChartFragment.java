@@ -123,7 +123,7 @@ public class MainChartFragment extends Fragment {
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Pierwsze uruchomienie");
             alert.setMessage("Wykres będzie się zapełniał w miarę dodawania wydatków");
-            alert.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            alert.setPositiveButton("Zamknij", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(getContext(), "Miłego Korzystania z aplikacji!", Toast.LENGTH_SHORT).show();
@@ -219,6 +219,7 @@ public class MainChartFragment extends Fragment {
                 setupPieChart(saldo);
                 makeChart(currentMonth);
                 dialog.dismiss();
+                onStart();
             }
         });
 
