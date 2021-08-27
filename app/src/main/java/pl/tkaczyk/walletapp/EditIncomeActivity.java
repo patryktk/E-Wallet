@@ -74,7 +74,7 @@ public class EditIncomeActivity extends AppCompatActivity {
                 value = Double.valueOf(editTextValue.getText().toString());
                 date = tvDate.getText().toString();
                 description = editTextDescription.getText().toString();
-                db.updateIncome(id, value, date, description, monthName);
+                confirmEditDialog(id,value, date, description, monthName);
             }
         });
         deleteButton.setOnClickListener(V ->{
@@ -85,6 +85,27 @@ public class EditIncomeActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v ->
                 onBackPressed());
     }
+
+    private void confirmEditDialog(String id, Double value, String date, String description, String monthName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edytować przychód?");
+        builder.setMessage("Jesteś pewny że chcesz dokonać edycji?");
+        builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.updateIncome(id, value, date, description, monthName);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+
     void confirmDeleteDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Usunąć przychód?");

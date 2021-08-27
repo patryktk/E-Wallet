@@ -25,6 +25,7 @@
     <string name="wydatki">Wydatki</string>
     <string name="brak_danych_dodaj_przychód">Brak danych. Dodaj przychód</string>
     <string name="brak_danych_dodaj_wydatek">Brak danych. Dodaj wydatek</string>
+    <string name="brak_danych">Brak danych. Dodaj dane</string>
     <string name="nazwa_kategori">Nazwa kategorii</string>
 
     <string name="kategorie">Kategorie</string>

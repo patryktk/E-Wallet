@@ -46,7 +46,7 @@ public class BudgetFragment extends Fragment {
     String monthName, chooseYear = "";
     DataBaseHelper db;
     ArrayList<String> arrayListBudgetCategory, arrayListBudgetValue;
-    TextView incomeValue;
+    TextView incomeValue, incomeName;
     AdapterBudget mAdapterBudget;
     RecyclerView mRecyclerView;
     AppCompatButton yearButton;
@@ -121,6 +121,10 @@ public class BudgetFragment extends Fragment {
 
     private void listOfExpenses(int x, View view) {
         String monthOfBar = pickMonth(x + 1);
+        incomeValue = view.findViewById(R.id.textViewBudgetIncomeValue);
+        incomeName = view.findViewById(R.id.textViewBudgetIncomeName);
+        incomeValue.setVisibility(View.VISIBLE);
+        incomeName.setVisibility(View.VISIBLE);
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         if (chooseYear == "") {

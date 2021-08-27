@@ -3,6 +3,7 @@ package pl.tkaczyk.walletapp;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,9 +19,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Calendar;
 import java.util.List;
+
+import pl.tkaczyk.walletapp.fragments.BudgetFragment;
+import pl.tkaczyk.walletapp.fragments.MainChartFragment;
 
 public class EditExpenseActivity extends AppCompatActivity {
 
@@ -49,6 +54,7 @@ public class EditExpenseActivity extends AppCompatActivity {
         dateButton = findViewById(R.id.buttonEditExpenseDate);
         spinner = findViewById(R.id.spinnerEditExpense);
         fillSpinner();
+
 
 
         getAndSetIntentData();
@@ -81,7 +87,8 @@ public class EditExpenseActivity extends AppCompatActivity {
                 category = spinner.getSelectedItem().toString();
                 date = tvDate.getText().toString();
                 description = editTextDescription.getText().toString();
-                db.updateExpense(id, value, category, date, description, monthName);
+                confirmDialogEdit(id, value, category, date, description, monthName);
+
             }
         });
         deleteButton.setOnClickListener(V ->{
@@ -92,6 +99,27 @@ public class EditExpenseActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v ->
                 onBackPressed());
     }
+
+    private void confirmDialogEdit(String id, Double value, String category, String date, String description, String monthName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Potwierdzenie zmian?");
+        builder.setMessage("Jesteś pewny że chcesz zatwierdzić zmiany?");
+        builder.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.updateExpense(id, value, category, date, description, monthName);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+
     void confirmDeleteDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Usunąc wydatek?");
@@ -169,12 +197,20 @@ public class EditExpenseActivity extends AppCompatActivity {
             editTextValue.setText(value.toString());
             editTextDescription.setText(description);
             tvDate.setText(date);
-            int categoryId = db.getIdCategoriesByName(category, signInAccount.getEmail()) - 1;
-            spinner.setSelection(categoryId);
+//            int categoryId = db.getIdCategoriesByName(category, signInAccount.getEmail());
+            spinner.setSelection(getIndexSpinner(spinner,category));
 
         } else {
             Toast.makeText(this, "NO DATA!", Toast.LENGTH_SHORT).show();
         }
+    }
+    int getIndexSpinner(Spinner spinner, String categoryName){
+        for(int i=0;i<spinner.getCount();i++){
+            if(spinner.getItemAtPosition(i).toString().equalsIgnoreCase(categoryName)){
+                return i;
+            }
+        }
+        return 0;
     }
 
     void fillSpinner() {

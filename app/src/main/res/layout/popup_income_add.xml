@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
         android:layout_marginTop="20dp"
-        android:text="@string/data"
+        android:text="@string/dodaj"
         android:background="@drawable/custom_add_expense_button"/>
 
     <androidx.appcompat.widget.AppCompatButton

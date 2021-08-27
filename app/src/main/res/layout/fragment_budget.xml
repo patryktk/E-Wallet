@@ -23,7 +23,8 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:text="@string/przychod"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/textViewBudgetIncomeValue"
@@ -37,7 +38,8 @@
         android:gravity="center"
         android:text="0zł"
         android:textAlignment="textEnd"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
