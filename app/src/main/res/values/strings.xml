@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wallet</string>
+    <string name="app_name">E-Wallet</string>
     <string name="email">Email</string>
     <string name="button_logout">Logout</string>
     <string name="facebook_app_id">284599049963546</string>

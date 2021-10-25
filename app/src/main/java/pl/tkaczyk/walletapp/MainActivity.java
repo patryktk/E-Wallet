@@ -174,12 +174,10 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(intent);
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, "Sorry, auth failed ;x", Toast.LENGTH_SHORT).show();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-
                         }
                     }
                 });

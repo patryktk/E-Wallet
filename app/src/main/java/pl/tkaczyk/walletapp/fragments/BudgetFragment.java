@@ -62,7 +62,6 @@ public class BudgetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-
         mBarChart = (BarChart) view.findViewById(R.id.barChart);
         incomeValue = (TextView) view.findViewById(R.id.textViewBudgetIncomeValue);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewBudget);

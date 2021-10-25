@@ -307,7 +307,6 @@ public class MainChartFragment extends Fragment {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
-
         Cursor cursor = db.getExpensesByMonthChart(month, signInAccount.getEmail(), currentYear);
         if (cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
